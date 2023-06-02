@@ -4,15 +4,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Api from './api';
 import { loginReducer } from './reducer';
 
-import Header from './components/header/Header';
-import LoginForm from './pages/login/LoginForm';
-import Network from './pages/network/Network';
-import RegisterForm from './pages/register/RegisterForm';
-import Portfolio from './pages/portfolio/Portfolio';
-import Wanted from './pages/wanted/Wanted';
-import WantedCreate from './pages/wanted/WantedCreate';
-import WantedRead from './pages/wanted/WantedRead';
-import WantedUpdate from './pages/wanted/WantedUpdate';
+import Header from './sections/header';
+import Footer from './sections/footer';
+
+
+import LoginForm from './pages/login/loginform';
+import RegisterForm from './pages/register/registerform';
+import MainPage from './pages/mainpage/mainpage';
+import Rank from './pages/rank/rank';
+import PostDetail from './pages/postdetail'
+
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -62,17 +63,14 @@ function App() {
                 <Router>
                     <Header />
                     <Routes>
-                        <Route path="/" exact element={<Portfolio />} />
+                        <Route path="/" exact element={<MainPage />} />
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
-                        <Route path="/user/:userId" element={<Portfolio />} />
-                        <Route path="/network" element={<Network />} />
-                        <Route path="/wanted" element={<Wanted />} />
-                        <Route path="/wanted/create" element={<WantedCreate />} />
-                        <Route path="/wanted/read" element={<WantedRead />} />
-                        <Route path="/wanted/update" element={<WantedUpdate />} />
-                        <Route path="*" element={<Portfolio />} />
+                        <Route path="/story" element={<Story />} />
+                        <Route path="/story/:postId" element={<PostDetail />} />
+                        <Route path="*" element={<Rank />} />
                     </Routes>
+                    <Footer />
                 </Router>
             </UserStateContext.Provider>
         </DispatchContext.Provider>
