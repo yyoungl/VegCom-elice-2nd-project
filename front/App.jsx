@@ -7,7 +7,7 @@ import { loginReducer } from './reducer';
 // import Header from './src/sections/header';
 // import Footer from './src/sections/footer';
 
-import LoginForm from './src/pages/login/loginform';
+import LoginForm from './src/pages/login/loginform.jsx';
 import RegisterForm from './src/pages/register/registerform';
 import MainPage from './src/pages/mainpage/mainpage.jsx';
 // import Rank from './src/pages/rank/rank';
