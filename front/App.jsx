@@ -56,8 +56,8 @@ function App() {
     }
 
     return (
-        // <DispatchContext.Provider value={dispatch}>
-        //     <UserStateContext.Provider value={userState}>
+        <DispatchContext.Provider value={dispatch}>
+            <UserStateContext.Provider value={userState}>
         <Router>
             {/* <Header /> */}
             <Routes>
@@ -67,11 +67,11 @@ function App() {
                 {/* <Route path="/story" element={<Story />} />
                 <Route path="/story/:postId" element={<PostDetail />} />
                 <Route path="*" element={<Rank />} /> */}
-            </Routes>
-            {/* <Footer /> */}
-        </Router>
-        //     </UserStateContext.Provider>
-        // </DispatchContext.Provider>
+                    </Routes>
+                    {/* <Footer /> */}
+                </Router>
+            </UserStateContext.Provider>
+        </DispatchContext.Provider>
     );
 }
 
