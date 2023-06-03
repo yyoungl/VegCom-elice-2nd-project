@@ -4,7 +4,7 @@ function MainPage() {
     return (
         <div>
             <img
-                src="front/src/static/logoshort.png"
+                src="/public/logoshort.png"
                 alt="오채완 로고"
                 className="logo"
                 style={{
