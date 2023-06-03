@@ -1,7 +1,9 @@
 import 'dotenv/config';
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
-const mysqlDB = mysql.createConnection({
+import { User } from './models/User.js';
+
+const mysqlDBPromise = mysql.createPool({
     host: process.env.DB_IP,
     user: 'root',
     password: '',
@@ -9,16 +11,17 @@ const mysqlDB = mysql.createConnection({
     database: process.env.DB_DATABASE,
 });
 
-mysqlDB.connect(err => {
-    if (err) {
-        console.log('MysqlDB 연결에 실패하였습니다...\n' + err);
-        mysqlDB.end();
-        throw err;
-    } else {
+mysqlDBPromise
+    .getConnection()
+    .then(() => {
         console.log(
-            `정상적으로 MysqlDB 서버에 연결되었습니다.  mysql://${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`,
+            `정상적으로 MysqlDB 서버에 연결되었습니다. mysql://${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`,
         );
-    }
-});
+    })
+    .catch(err => {
+        console.log('MysqlDB 연결에 실패하였습니다...\n' + err);
+        mysqlDBPromise.end();
+        throw err;
+    });
 
-export { mysqlDB };
+export { mysqlDBPromise as mysqlDB, User };

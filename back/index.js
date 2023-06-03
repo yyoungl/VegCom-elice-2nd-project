@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import { app } from './src/app.js';
-import { mysqlDB } from './src/db/index.js';
 
 const PORT = process.env.SERVER_PORT || 5000;
 
