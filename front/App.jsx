@@ -63,8 +63,8 @@ function App() {
                     <Routes>
                         <Route path="/" exact element={<MainPage />} />
                         <Route path="/login" element={<LoginForm />} />
-                        {/* <Route path="/register" element={<RegisterForm />} />
-                <Route path="/story" element={<Story />} />
+                        <Route path="/register" element={<RegisterForm />} />
+                {/* <Route path="/story" element={<Story />} />
                 <Route path="/story/:postId" element={<PostDetail />} />
                 <Route path="*" element={<Rank />} /> */}
                     </Routes>

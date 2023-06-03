@@ -56,15 +56,12 @@ function LoginForm() {
 
     return (
         <div className="login-page">
-            <div className="logo-box">
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <img
                     src="/logoshort.png"
                     alt="오채완 로고"
                     className="logo"
-                    style={{
-                        width: '60%',
-                        maxWidth: '50vh',
-                    }}></img>
+                    style={{ width: '500px', height: 'auto', maxWidht: '40vh' }}></img>
             </div>
             <form onSubmit={handleSubmit} className="flex flex-col">
                 <div className="flex items-center my-2">
