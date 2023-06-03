@@ -1,5 +1,5 @@
 import { Router } from 'express';
-// import { login_required } from '../middlewares/login_required';
+import { login_required } from '../middlewares/login_required.js';
 import { userAuthService } from '../services/userService.js';
 
 const userAuthRouter = Router();
@@ -22,7 +22,7 @@ userAuthRouter.post('/login', async function (req, res, next) {
     }
 });
 
-userAuthRouter.get('/isLogin', async function (req, res, next) {
+userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
     try {
         const userId = req.currentUserId;
         const currentUserInfo = await userAuthService.getUserInfo({ userId });

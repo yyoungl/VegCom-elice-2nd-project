@@ -1,28 +1,38 @@
-import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+
+const jwtOptions = {
+    secretOrKey: process.env.JWT_SECRET_KEY || 'jwt-secret-key',
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+};
+
+passport.use(
+    new JwtStrategy(jwtOptions, (jwtPayload, done) => {
+        // JWT 토큰으로부터 추출한 userId를 검증하고, 검증 결과를 done 콜백 함수를 통해 전달합니다.
+        const userId = jwtPayload.userId;
+        if (userId) {
+            return done(null, userId);
+        } else {
+            return done(null, false);
+        }
+    }),
+);
 
 function login_required(req, res, next) {
-    // request 헤더로부터 authorization bearer 토큰을 받음.
-    const userToken = req.headers['authorization']?.split(' ')[1] ?? 'null';
+    passport.authenticate('jwt', { session: false }, (err, userId) => {
+        if (err) {
+            res.status(500).send('서버 오류가 발생했습니다. 다시 시도해주세요.');
+            return;
+        }
 
-    // 이 토큰은 jwt 토큰 문자열이거나, 혹은 "null" 문자열임.
-    // 토큰이 "null" 일 경우, login_required 가 필요한 서비스 사용을 제한함.
-    if (userToken === 'null') {
-        console.log('서비스 사용 요청이 있습니다.하지만, Authorization 토큰: 없음');
-        res.status(400).send('로그인한 유저만 사용할 수 있는 서비스입니다.');
-        return;
-    }
+        if (!userId) {
+            res.status(401).send('로그인한 유저만 사용할 수 있는 서비스입니다.');
+            return;
+        }
 
-    // 해당 token 이 정상적인 token인지 확인 -> 토큰에 담긴 userId 정보 추출
-    try {
-        const secretKey = process.env.JWT_SECRET_KEY || 'secret-key';
-        const jwtDecoded = jwt.verify(userToken, secretKey);
-        const userId = jwtDecoded.userId;
         req.currentUserId = userId;
         next();
-    } catch (error) {
-        res.status(400).send('정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요.');
-        return;
-    }
+    })(req, res, next);
 }
 
 export { login_required };
