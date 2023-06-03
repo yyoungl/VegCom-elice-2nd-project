@@ -9,7 +9,7 @@ import * as Api from './api';
 
 import LoginForm from './src/pages/login/loginform';
 import RegisterForm from './src/pages/register/registerform';
-// import MainPage from './src/pages/mainpage/mainpage.jsx';
+import MainPage from './src/pages/mainpage/mainpage.jsx';
 // import Rank from './src/pages/rank/rank';
 // import PostDetail from './src/pages/postdetail/postdetail.jsx';
 
@@ -72,7 +72,8 @@ function App() {
         //         </Router>
         //     </UserStateContext.Provider>
         // </DispatchContext.Provider>
-        <p>xxxx</p>
+
+        <MainPage />
     );
 }
 

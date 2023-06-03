@@ -1,9 +1,10 @@
+
+
 function MainPage() {
     return (
         <div>
             <img
-                src="/static/logoShort.png"
-                alt="오채완 로고"
+                src="/logoshort.png"
                 className="logo"
                 style={{
                     width: '60%',
@@ -13,3 +14,5 @@ function MainPage() {
         </div>
     );
 }
+
+export default MainPage;
