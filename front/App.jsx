@@ -7,7 +7,7 @@ import * as Api from './api';
 // import Header from './src/sections/header';
 // import Footer from './src/sections/footer';
 
-import LoginForm from './src/pages/login/loginform';
+import LoginForm from './src/pages/login/loginform.jsx';
 import RegisterForm from './src/pages/register/registerform';
 import MainPage from './src/pages/mainpage/mainpage.jsx';
 // import Rank from './src/pages/rank/rank';
@@ -58,22 +58,20 @@ function App() {
     return (
         // <DispatchContext.Provider value={dispatch}>
         //     <UserStateContext.Provider value={userState}>
-        //         <Router>
-        //             <Header />
-        //             <Routes>
-        //                 <Route path="/" exact element={<MainPage />} />
-        //                 <Route path="/login" element={<LoginForm />} />
-        //                 <Route path="/register" element={<RegisterForm />} />
-        //                 <Route path="/story" element={<Story />} />
-        //                 <Route path="/story/:postId" element={<PostDetail />} />
-        //                 <Route path="*" element={<Rank />} />
-        //             </Routes>
-        //             <Footer />
-        //         </Router>
+        <Router>
+            {/* <Header /> */}
+            <Routes>
+                <Route path="/" exact element={<MainPage />} />
+                <Route path="/login" element={<LoginForm />} />
+                {/* <Route path="/register" element={<RegisterForm />} />
+                <Route path="/story" element={<Story />} />
+                <Route path="/story/:postId" element={<PostDetail />} />
+                <Route path="*" element={<Rank />} /> */}
+            </Routes>
+            {/* <Footer /> */}
+        </Router>
         //     </UserStateContext.Provider>
         // </DispatchContext.Provider>
-
-        <MainPage />
     );
 }
 

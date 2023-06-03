@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Api from '../../../api';
 import { DispatchContext } from '../../../App';
 
+
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useContext(DispatchContext);
@@ -42,7 +43,7 @@ function LoginForm() {
                 payload: user,
             });
 
-            navigate('/', { replace: true });
+            navigate('/rank/list', { replace: true });
         } catch (err) {
             if (err.response && err.response.status === 400) {
                 alert('비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.');
@@ -52,13 +53,12 @@ function LoginForm() {
         }
     };
 
-    document.body.style.backgroundColor = '#e5e1fe';
 
     return (
         <div className="login-page">
             <div className="logo-box">
                 <img
-                    src="/static/logoshort.png"
+                    src="/logoshort.png"
                     alt="오채완 로고"
                     className="logo"
                     style={{
@@ -66,65 +66,48 @@ function LoginForm() {
                         maxWidth: '50vh',
                     }}></img>
             </div>
-            <Row className="justify-content-center mt-5">
-                <Col lg={5} md={8} xs={10}>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="loginEmail">
-                            <Form.Label>EMAIL</Form.Label>
-                            <Form.Control
-                                className="inputLogin"
-                                placeholder="Email"
-                                type="email"
-                                autoComplete="on"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                            />
-                            {!isEmailValid && email !== '' && (
-                                <Form.Text className="text-success">이메일 형식이 올바르지 않습니다.</Form.Text>
-                            )}
-                            {!isFormValid && email === '' && (
-                                <Form.Text className="text-success">이메일을 입력해주세요.</Form.Text>
-                            )}
-                        </Form.Group>
+            <form onSubmit={handleSubmit} className="flex flex-col">
+                <div className="flex items-center my-2">
+                    <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 mr-2 w-24">
+                        Email
+                    </label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        className="flex-grow block rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                        placeholder="id@email.com"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+                </div>
 
-                        <Form.Group controlId="loginPassword" className="mt-3">
-                            <Form.Label>PW</Form.Label>
-                            <Form.Control
-                                className="inputLogin"
-                                placeholder="Password"
-                                type="password"
-                                autoComplete="on"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                style={{ marginBottom: '2rem' }}
-                            />
-                            {!isPasswordValid && password !== '' && (
-                                <Form.Text className="text-success">비밀번호는 4자리 이상입니다.</Form.Text>
-                            )}
-                            {!isFormValid && password === '' && (
-                                <Form.Text className="text-success">비밀번호를 입력해주세요.</Form.Text>
-                            )}
-                        </Form.Group>
+                <div className="flex items-center my-2">
+                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900 mr-2 w-24">
+                        Password
+                    </label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        className="flex-grow block rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                        placeholder="*********"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                </div>
 
-                        <Form.Group as={Row} className="mt-3 text-center">
-                            <Col sm={{ span: 20 }}>
-                                <button type="submit" disabled={!isFormValid} className="shadow-button">
-                                    로그인
-                                </button>
-                            </Col>
-                        </Form.Group>
+                <div className="mt-8 flex justify-center text-lg text-black">
+                    <button 
+                        type="submit" 
+                        disabled={!isFormValid} 
+                        className={`rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 ${isFormValid ? 'bg-yellow-400 hover:bg-yellow-600' : 'bg-gray-400 cursor-not-allowed'}`}>
+                        Login
+                    </button>
+                </div>
+            </form>
 
-                        <Form.Group as={Row} className="mt-3 text-center">
-                            <Col sm={{ span: 20 }}>
-                                <button className="shadow-button" onClick={() => navigate('/register')}>
-                                    회원가입
-                                </button>
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                </Col>
-            </Row>
-        </div>
+    </div>    
     );
 }
 
