@@ -53,6 +53,21 @@ class userAuthService {
 
         return user;
     }
+    // 유저 생성    
+    static async createUser({email, password, nickname}) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({
+          email,
+          password: hashedPassword,
+          nickname,
+        });
+    }
+
+    static async checkDuplicate ({email}) {
+        const result = await User.findByEmail({ email });
+        return result
+      };
+      
 }
 
 export { userAuthService };

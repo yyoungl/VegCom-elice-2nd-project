@@ -4,6 +4,25 @@ import { userAuthService } from '../services/userService.js';
 
 const userAuthRouter = Router();
 
+userAuthRouter.post("/register", async function (req, res, next) {
+    try {
+        const {email, password, nickname} = req.body;
+        const isDuplicate = await userAuthService.checkDuplicate({email});
+
+        if (isDuplicate) {
+            res.status(409).send({ message: "이미 존재하는 이메일 입니다." });
+            throw new Error(user.errorMessage);
+        } 
+
+          const user = await userAuthService.createUser({ email, password, nickname});
+          res.status(200).send({user});
+
+        
+    }catch (error) {
+        next(error);
+    }
+});
+
 userAuthRouter.post('/login', async function (req, res, next) {
     try {
         const email = req.body.email;
@@ -38,3 +57,7 @@ userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
 });
 
 export { userAuthRouter };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 835735056ba260cb311e20222a0141ee4ffa74db
