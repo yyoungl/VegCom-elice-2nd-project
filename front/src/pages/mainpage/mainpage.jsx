@@ -1,8 +1,10 @@
+import React from 'react';
+
 function MainPage() {
     return (
         <div>
             <img
-                src="/static/logoShort.png"
+                src="front/src/static/logoshort.png"
                 alt="오채완 로고"
                 className="logo"
                 style={{
@@ -13,3 +15,5 @@ function MainPage() {
         </div>
     );
 }
+
+export default MainPage;
