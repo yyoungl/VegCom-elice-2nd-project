@@ -15,8 +15,8 @@ class userAuthService {
 
         // 비밀번호 확인
         const correctPasswordHash = user.password;
-        // const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
-        const isPasswordCorrect = password == correctPasswordHash;
+        const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
+        // const isPasswordCorrect = password == correctPasswordHash;
         if (!isPasswordCorrect) {
             const errorMessage = '비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
@@ -53,21 +53,24 @@ class userAuthService {
 
         return user;
     }
-    // 유저 생성    
-    static async createUser({email, password, nickname}) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({
-          email,
-          password: hashedPassword,
-          nickname,
-        });
+
+    static async checkDuplicate({ email }) {
+        const user = await User.findByEmail({ email });
+        return user;
     }
 
-    static async checkDuplicate ({email}) {
-        const result = await User.findByEmail({ email });
-        return result
-      };
-      
+    // 유저 생성
+    static async createUser({ email, password, nickname }) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = await User.create({
+            email,
+            password: hashedPassword,
+            nickname,
+        });
+
+        return user;
+    }
 }
 
 export { userAuthService };
