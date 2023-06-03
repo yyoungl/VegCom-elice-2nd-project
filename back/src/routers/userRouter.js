@@ -54,4 +54,54 @@ userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
     }
 });
 
+// 1. 유저 정보 불러오기
+userAuthRouter.get('/user/:userId', async function (req, res) {
+    try {
+        const userId = req.params.userId;
+        const user = userAuthService.findById(userId);
+
+        if (user.errorMessage) {
+            throw new Error(updateUser.errorMessage);
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 2. 유저 정보 수정하기(별명, 설명)
+userAuthRouter.put('/user/:userId', async function (req, res) {
+    try {
+        const userId = req.params.userId;
+        const { nickName, description } = req.body;
+        const toUpdate = { nickName, description };
+        const updatedUser = await userAuthService.setUser({ userId, toUpdate });
+
+        if (updatedUser.errorMessage) {
+            throw new Error(updatedUser.errorMessage);
+        }
+
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 3. 유저 정보 삭제하기
+userAuthRouter.delete('/user/:userId', async function (req, res) {
+    try {
+        const userId = req.params.userId;
+        const deletedUser = await userAuthService.deleteUser(userId);
+
+        if (deletedUser.errorMessage) {
+            throw new Error(deletedUser.errorMessage);
+        }
+
+        res.status(200).json({ message: '회원 탈퇴 완료' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userAuthRouter };
