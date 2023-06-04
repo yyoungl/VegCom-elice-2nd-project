@@ -59,7 +59,6 @@ userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
 // 유저 실적 보여주기
 userAuthRouter.get('/point', login_required, async function (req, res, next) {
     try {
-        console.log(req);
         const userId = req.currentUserId;
         const userPoint = await userAuthService.getUserPoint({ userId });
 
