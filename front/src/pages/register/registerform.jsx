@@ -30,16 +30,20 @@ function RegisterForm() {
         e.preventDefault();
 
         try {
-            await Api.post('user/register', {
+            const res = await Api.post('user/register', {
                 email,
                 password,
                 nickname,
             });
+            alert(res.success.message);
 
             // 로그인 페이지로 이동함.
             navigate('/login');
         } catch (err) {
-            alert('회원가입에 실패하였습니다.서버를 확인해주세요.');
+            if (err.response.status === 400) {
+                alert(err.response.data.error);
+            }
+            console.log('회원가입에 실패하였습니다.', err);
         }
     };
 
