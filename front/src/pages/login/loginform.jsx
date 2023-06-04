@@ -3,48 +3,44 @@ import { useNavigate } from 'react-router-dom';
 import * as Api from '../../../api';
 import { DispatchContext } from '../../../App';
 
-
-
 function LoginForm() {
-     const navigate = useNavigate();
-     const dispatch = useContext(DispatchContext);
+    const navigate = useNavigate();
+    const dispatch = useContext(DispatchContext);
 
-     const [email, setEmail] = useState('');
-     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-     //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
-     const validateEmail = email => {
-         if (email === '') {
-             return false;
-         }
-         return email
-             .toLowerCase()
-             .match(
-                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-             );
-     };
+    //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
+    const validateEmail = email => {
+        if (email === '') {
+            return false;
+        }
+        return email
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            );
+    };
 
-     const isEmailValid = validateEmail(email);
-     const isPasswordValid = password.length >= 4;
-     const isFormValid = isEmailValid && isPasswordValid;
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = password.length >= 4;
+    const isFormValid = isEmailValid && isPasswordValid;
 
-     const handleSubmit = async e => {
-         e.preventDefault();
+    const handleSubmit = async e => {
+        e.preventDefault();
 
-         try {
-             const res = await Api.post('user/login', {
-                 email,
-                 password,
-             });
-             const user = res.data;
-             const jwtToken = user.token;
-             sessionStorage.setItem('userToken', jwtToken);
-             dispatch({
-                 type: 'LOGIN_SUCCESS',
-                 payload: user,
-             });
-
-
+        try {
+            const res = await Api.post('user/login', {
+                email,
+                password,
+            });
+            const user = res.data;
+            const jwtToken = user.token;
+            sessionStorage.setItem('userToken', jwtToken);
+            dispatch({
+                type: 'LOGIN_SUCCESS',
+                payload: user,
+            });
 
             navigate('/rank/list', { replace: true });
         } catch (err) {
@@ -55,8 +51,6 @@ function LoginForm() {
             }
         }
     };
-
-
 
     return (
         <div className="login-page">
@@ -99,17 +93,24 @@ function LoginForm() {
                 </div>
 
                 <div className="mt-8 flex justify-center text-lg text-black">
-                    <button 
-                        type="submit" 
-                        disabled={!isFormValid} 
-                        className={`rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 ${isFormValid ? 'bg-yellow-400 hover:bg-yellow-600' : 'bg-gray-400 cursor-not-allowed'}`}>
+                    <button
+                        type="button"
+                        className="rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-30 mr-3"
+                        onClick={() => navigate('/register')}
+                        style={{ color: 'black' }}>
+                        회원가입하기
+                    </button>
+                    <button
+                        type="submit"
+                        disabled={!isFormValid}
+                        className={`rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 ${
+                            isFormValid ? 'bg-yellow-400 hover:bg-yellow-600' : 'bg-gray-400 cursor-not-allowed'
+                        }`}>
                         Login
                     </button>
-                    
                 </div>
             </form>
-
-    </div>    
+        </div>
     );
 }
 
