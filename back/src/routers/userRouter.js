@@ -73,6 +73,24 @@ userAuthRouter.get('/point', login_required, async function (req, res, next) {
     }
 });
 
+//전체 유저 수 불러오기
+userAuthRouter.get('/userCount', login_required, async function (req, res, next) {
+    try {
+        const userId = req.currentUserId;
+        console.log(userId);
+        const userCount = await userAuthService.getUserCount({ userId });
+
+        if (userCount.errorMessage) {
+            res.status(400).send({ error: userCount.errorMessage });
+            throw new Error(userCount.errorMessage);
+        }
+
+        res.status(200).send(userCount);
+    } catch (error) {
+        next(error);
+    }
+});
+
 // 유저 정보 불러오기
 userAuthRouter.get('/:userId', login_required, async function (req, res, next) {
     try {

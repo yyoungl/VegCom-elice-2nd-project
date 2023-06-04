@@ -75,6 +75,16 @@ class User {
 
         return userPoint;
     }
+
+    // 전체 유저 수 불러오기
+    static async getCount() {
+        const query = 'SELECT COUNT(*) AS userCount FROM user';
+        const [rows] = await mysqlDB.query(query);
+
+        const totalRows = rows[0];
+
+        return totalRows;
+    }
 }
 
 export { User };

@@ -138,6 +138,26 @@ class userAuthService {
 
         return userPoint;
     }
+
+    // 전체 유저 수 불러오기
+    static async getUserCount({ userId }) {
+        const user = await User.findById({ userId });
+
+        if (!user) {
+            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+            return { errorMessage };
+        }
+
+        const getUserCount = await User.getCount({ userId });
+
+        const userPoint = {
+            userCount: getUserCount.userCount,
+            successMessage: '전체 유저 수 불러오기를 성공하셨습니다.',
+            errorMessage: null,
+        };
+
+        return userPoint;
+    }
 }
 
 export { userAuthService };
