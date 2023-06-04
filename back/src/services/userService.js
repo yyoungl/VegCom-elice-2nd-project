@@ -5,7 +5,7 @@ import passport from 'passport';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-class userAuthService {
+class userAuthService {    
     // 로그인 검사
     static async getUser({ email, password }) {
         const user = await User.findByEmail({ email });
