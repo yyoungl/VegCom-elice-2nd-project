@@ -7,11 +7,12 @@ function MainPage() {
                 src="/logoshort.png"
                 alt="오채완 로고"
                 className="logo"
-                style={{
-                    width: '60%',
-                    maxWidth: '50vh',
-                }}></img>
-            <p>test</p>
+                ></img>
+            <p>
+                <a href="/login">로그인하기</a>
+                <br />
+                <a href="/register">회원가입하기</a>
+            </p>
         </div>
     );
 }
