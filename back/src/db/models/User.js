@@ -3,17 +3,10 @@ import { mysqlDB } from '../index.js';
 class User {
     // 새로운 유저 생성
     static async create({ email, password, nickname }) {
-<<<<<<< HEAD
         const query = 'INSERT INTO user (email, password, nickname, flag) VALUES (?, ?, ?, "일반")';
         const [rows] = await mysqlDB.query(query, [email, password, nickname]);
 
         const createdUser = rows[0];
-=======
-        const query = 'INSERT INTO user (email, password, nickname) VALUES (?, ?, ?)';
-        const [result] = await mysqlDB.query(query, [email, password, nickname]);
-
-        const createdUser = JSON.parse(JSON.stringify(rows[0]));
->>>>>>> feature/김지원
         return createdUser;
     }
 
