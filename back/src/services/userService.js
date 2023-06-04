@@ -71,6 +71,57 @@ class userAuthService {
 
         return user;
     }
+    
+    // 유저 생성
+    static async createUser({ email, password, nickname }) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({
+            email,
+            password: hashedPassword,
+            nickname,
+        });
+    }
+
+    static async checkDuplicate({ email }) {
+        const result = await User.findByEmail({ email });
+        return result;
+    }
+
+    // 유저 정보 수정(별명, 설명)
+    static async setUser({ userId, toUpdate }) {
+        let user = await User.findById({ userId });
+
+        if (!user) {
+            const errorMessage = '회원정보를 찾을 수 없습니다.';
+            return { errorMessage };
+        }
+
+        if (toUpdate.nickName) {
+            const fieldToUpdate = 'nickName';
+            const newValue = toUpdate.nickName;
+            updatedUser = await User.update({ userId, fieldToUpdate, newValue });
+        }
+
+        if (toUpdate.description) {
+            const fieldToUpdate = 'description';
+            const newValue = toUpdate.description;
+            updatedUser = await User.update({ userId, fieldToUpdate, newValue });
+        }
+
+        return updatedUser;
+    }
+
+    // 유저 정보 삭제
+    static async deleteUser(userId) {
+        const user = await User.findById({ userId });
+        if (!user) {
+            const errorMessage = '회원정보를 찾을 수 없습니다.';
+            return { errorMessage };
+        }
+
+        const deletedUser = await User.delete({ userId });
+        return deletedUser;
+    }
 }
 
 export { userAuthService };
