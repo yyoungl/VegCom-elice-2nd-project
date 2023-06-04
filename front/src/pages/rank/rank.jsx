@@ -4,6 +4,9 @@ import Navigator from '../../sections/navigator';
 import Header from '../../sections/header';
 
 function Rank() {
+    return (
+        <Header />
+    )
     
 }
 
