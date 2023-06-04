@@ -35,7 +35,7 @@ function RegisterForm() {
                 password,
                 nickname,
             });
-            alert(res.success.message);
+            alert(res.successMessage);
 
             // 로그인 페이지로 이동함.
             navigate('/login');
