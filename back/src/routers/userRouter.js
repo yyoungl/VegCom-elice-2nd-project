@@ -74,7 +74,7 @@ userAuthRouter.get('/point', login_required, async function (req, res, next) {
 });
 
 // 유저 정보 불러오기
-userAuthRouter.get('/:userId', async function (req, res, next) {
+userAuthRouter.get('/:userId', login_required, async function (req, res, next) {
     try {
         const userId = req.params.userId;
         const user = await userAuthService.getUserInfo({ userId });
@@ -91,7 +91,7 @@ userAuthRouter.get('/:userId', async function (req, res, next) {
 });
 
 // 유저 정보 수정하기(별명, 설명)
-userAuthRouter.put('/:userId', async function (req, res, next) {
+userAuthRouter.put('/:userId', login_required, async function (req, res, next) {
     try {
         const userId = req.params.userId;
         const { nickname, description } = req.body;
@@ -110,7 +110,7 @@ userAuthRouter.put('/:userId', async function (req, res, next) {
 });
 
 // 유저 정보 삭제하기
-userAuthRouter.delete('/:userId', async function (req, res, next) {
+userAuthRouter.delete('/:userId', login_required, async function (req, res, next) {
     try {
         const userId = req.params.userId;
         const deletedUser = await userAuthService.deleteUser(userId);
