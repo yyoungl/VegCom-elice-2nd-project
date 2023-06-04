@@ -15,8 +15,13 @@
         "vite": "^4.3.9"
     },
     "dependencies": {
+        "@heroicons/react": "^2.0.18",
+        "@heroicons/vue": "^2.0.18",
+        "@iconify/icons-heroicons-solid": "^1.2.6",
+        "@react-icons/all-files": "^4.1.0",
         "autoprefixer": "^10.4.14",
         "axios": "^1.4.0",
+        "heroicons-react": "^1.4.1",
         "postcss": "^8.4.24",
         "react-router-dom": "^6.11.2"
     }
