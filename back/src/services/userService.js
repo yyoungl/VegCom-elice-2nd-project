@@ -38,6 +38,7 @@ class userAuthService {
             email,
             name,
             description,
+            successMessage: '로그인에 성공했습니다.',
             errorMessage: null,
         };
 
@@ -104,8 +105,9 @@ class userAuthService {
     }
 
     // 유저 정보 삭제
-    static async deleteUser(userId) {
+    static async deleteUser({ userId }) {
         const user = await User.findById({ userId });
+
         if (!user) {
             const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
@@ -113,6 +115,28 @@ class userAuthService {
 
         const deleteUser = await User.delete({ userId });
         return deleteUser;
+    }
+
+    // 유저의 현재 포인트, 누적 포인트 불러오기
+    static async getUserPoint({ userId }) {
+        const user = await User.findById({ userId });
+
+        if (!user) {
+            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+            return { errorMessage };
+        }
+
+        const getUserPoint = await User.getPoint({ userId });
+
+        const userPoint = {
+            id: getUserPoint.userId,
+            currentPoint: getUserPoint.currentPoint,
+            accuPoint: getUserPoint.accuPoint,
+            successMessage: '유저의 포인트 현황 불러오기를 성공하셨습니다.',
+            errorMessage: null,
+        };
+
+        return userPoint;
     }
 }
 

@@ -56,6 +56,24 @@ userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
     }
 });
 
+// 유저 실적 보여주기
+userAuthRouter.get('/point', login_required, async function (req, res, next) {
+    try {
+        console.log(req);
+        const userId = req.currentUserId;
+        const userPoint = await userAuthService.getUserPoint({ userId });
+
+        if (userPoint.errorMessage) {
+            res.status(400).send({ error: deletedUser.errorMessage });
+            throw new Error(userPoint.errorMessage);
+        }
+
+        res.status(200).send(userPoint);
+    } catch (error) {
+        next(error);
+    }
+});
+
 // 유저 정보 불러오기
 userAuthRouter.get('/:userId', async function (req, res, next) {
     try {

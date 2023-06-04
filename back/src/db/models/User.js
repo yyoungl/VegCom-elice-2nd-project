@@ -64,6 +64,17 @@ class User {
 
         return deletedUser; // delete된 유저를 반환한다.
     }
+
+    // 유저의 포인트 내역 불러오기
+    static async getPoint({ userId }) {
+        const query =
+            'SELECT point.userId, point.currentPoint, point.accuPoint FROM user RIGHT JOIN point ON user.id = point.userId WHERE user.id = ?';
+        const [rows] = await mysqlDB.query(query, [userId]);
+
+        const userPoint = rows[0];
+
+        return userPoint;
+    }
 }
 
 export { User };
