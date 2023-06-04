@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 class userAuthService {
+    // 로그인 검사
     static async getUser({ email, password }) {
         const user = await User.findByEmail({ email });
 
@@ -43,6 +44,7 @@ class userAuthService {
         return loginUser;
     }
 
+    // ID로 유저 검색
     static async getUserInfo({ userId }) {
         const user = await User.findById({ userId });
 
@@ -51,40 +53,37 @@ class userAuthService {
             return { errorMessage };
         }
 
-        return user;
+        const selectedUser = {
+            id: user.id,
+            email: user.email,
+            password: user.password,
+            userImage: user.userImage,
+            successMessage: '유저 정보 검색에 성공하셨습니다.',
+            errorMessage: null,
+        };
+
+        return selectedUser;
     }
 
-    static async checkDuplicate({ email }) {
+    // 유저 생성
+    static async createUser({ email, password, nickname }) {
+        // 이메일 중복 확인
         const user = await User.findByEmail({ email });
-        return user;
-    }
+        if (user) {
+            const errorMessage = '이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.';
+            return { errorMessage };
+        }
 
-    // 유저 생성
-    static async createUser({ email, password, nickname }) {
+        // 비밀번호 암호화
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = await User.create({
+        const createUser = await User.create({
             email,
             password: hashedPassword,
             nickname,
         });
 
-        return user;
-    }
-    
-    // 유저 생성
-    static async createUser({ email, password, nickname }) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({
-            email,
-            password: hashedPassword,
-            nickname,
-        });
-    }
-
-    static async checkDuplicate({ email }) {
-        const result = await User.findByEmail({ email });
-        return result;
+        return createUser;
     }
 
     // 유저 정보 수정(별명, 설명)
@@ -92,35 +91,28 @@ class userAuthService {
         let user = await User.findById({ userId });
 
         if (!user) {
-            const errorMessage = '회원정보를 찾을 수 없습니다.';
+            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
 
-        if (toUpdate.nickName) {
-            const fieldToUpdate = 'nickName';
-            const newValue = toUpdate.nickName;
-            updatedUser = await User.update({ userId, fieldToUpdate, newValue });
+        // toUpdate -> nickName, description
+        for (const [fieldToUpdate, newValue] of Object.entries(toUpdate)) {
+            user = await User.update({ userId, fieldToUpdate, newValue });
         }
 
-        if (toUpdate.description) {
-            const fieldToUpdate = 'description';
-            const newValue = toUpdate.description;
-            updatedUser = await User.update({ userId, fieldToUpdate, newValue });
-        }
-
-        return updatedUser;
+        return user;
     }
 
     // 유저 정보 삭제
     static async deleteUser(userId) {
         const user = await User.findById({ userId });
         if (!user) {
-            const errorMessage = '회원정보를 찾을 수 없습니다.';
+            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
 
-        const deletedUser = await User.delete({ userId });
-        return deletedUser;
+        const deleteUser = await User.delete({ userId });
+        return deleteUser;
     }
 }
 

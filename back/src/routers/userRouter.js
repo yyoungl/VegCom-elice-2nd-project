@@ -4,28 +4,28 @@ import { userAuthService } from '../services/userService.js';
 
 const userAuthRouter = Router();
 
+// 회원가입
 userAuthRouter.post('/register', async function (req, res, next) {
     try {
         const { email, password, nickname } = req.body;
 
-        const isDuplicate = await userAuthService.checkDuplicate({ email });
+        const createUser = await userAuthService.createUser({ email, password, nickname });
 
-        if (isDuplicate) {
-            res.status(400).send({ message: '이미 존재하는 이메일 입니다.' });
-            throw new Error(user.errorMessage);
+        if (createUser.errorMessage) {
+            res.status(400).send({ error: createUser.errorMessage });
+            throw new Error(createUser.errorMessage);
         }
 
-        const user = await userAuthService.createUser({ email, password, nickname });
-        res.status(200).send(user);
+        res.status(200).send(createUser);
     } catch (error) {
         next(error);
     }
 });
 
+// 로그인
 userAuthRouter.post('/login', async function (req, res, next) {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body;
 
         const user = await userAuthService.getUser({ email, password });
 
@@ -40,6 +40,7 @@ userAuthRouter.post('/login', async function (req, res, next) {
     }
 });
 
+// 로그인 검증
 userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
     try {
         const userId = req.currentUserId;
@@ -55,51 +56,54 @@ userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
     }
 });
 
-// 1. 유저 정보 불러오기
-userAuthRouter.get('/user/:userId', async function (req, res) {
+// 유저 정보 불러오기
+userAuthRouter.get('/:userId', async function (req, res, next) {
     try {
         const userId = req.params.userId;
-        const user = userAuthService.findById(userId);
+        const user = await userAuthService.getUserInfo({ userId });
 
         if (user.errorMessage) {
-            throw new Error(updateUser.errorMessage);
+            res.status(400).send({ error: user.errorMessage });
+            throw new Error(user.errorMessage);
         }
 
-        res.status(200).json(user);
+        res.status(200).send(user);
     } catch (error) {
         next(error);
     }
 });
 
-// 2. 유저 정보 수정하기(별명, 설명)
-userAuthRouter.put('/user/:userId', async function (req, res) {
+// 유저 정보 수정하기(별명, 설명)
+userAuthRouter.put('/:userId', async function (req, res, next) {
     try {
         const userId = req.params.userId;
-        const { nickName, description } = req.body;
-        const toUpdate = { nickName, description };
+        const { nickname, description } = req.body;
+        const toUpdate = { nickname, description };
         const updatedUser = await userAuthService.setUser({ userId, toUpdate });
 
         if (updatedUser.errorMessage) {
+            res.status(400).send({ error: updatedUser.errorMessage });
             throw new Error(updatedUser.errorMessage);
         }
 
-        res.status(200).json(updatedUser);
+        res.status(200).send(updatedUser);
     } catch (error) {
         next(error);
     }
 });
 
-// 3. 유저 정보 삭제하기
-userAuthRouter.delete('/user/:userId', async function (req, res) {
+// 유저 정보 삭제하기
+userAuthRouter.delete('/:userId', async function (req, res, next) {
     try {
         const userId = req.params.userId;
         const deletedUser = await userAuthService.deleteUser(userId);
 
         if (deletedUser.errorMessage) {
+            res.status(400).send({ error: deletedUser.errorMessage });
             throw new Error(deletedUser.errorMessage);
         }
 
-        res.status(200).json({ message: '회원 탈퇴 완료' });
+        res.status(200).send(deletedUser);
     } catch (error) {
         next(error);
     }
