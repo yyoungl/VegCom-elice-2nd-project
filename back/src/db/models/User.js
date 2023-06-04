@@ -81,9 +81,9 @@ class User {
         const query = 'SELECT COUNT(*) AS userCount FROM user';
         const [rows] = await mysqlDB.query(query);
 
-        const totalRows = rows[0];
+        const userCount = rows[0];
 
-        return totalRows;
+        return userCount;
     }
 }
 
