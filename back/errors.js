@@ -19,6 +19,10 @@ const errors = {
     UserNotFoundId: createError('UserNotFoundId', '요청한 사용자의 정보를 찾을 수 없습니다.', 404),
     // 잘못된 또는 만료된 토큰을 사용하여 사용자 검증 요청을 받은 경우의 오류
     InvalidToken: createError('InvalidToken', '잘못된 또는 만료된 토큰입니다.', 401),
+    // 로그인하지 않은 사용자가 요청하는 경우
+    NotAuthenticatedError: createError('NotAuthenticatedError', '로그인한 유저만 사용할 수 있는 서비스입니다.', 401),
+    // 서버 오류가 나타나는 경우
+    ServerError: createError('ServerError', '서버 오류가 발생했습니다. 다시 시도해주세요.', 500),
 
     // 로그인 실패
     LoginFailedError: createError('LoginFailedError', '로그인에 실패하셨습니다.', 401),
