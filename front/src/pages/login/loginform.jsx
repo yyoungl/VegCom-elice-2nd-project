@@ -52,7 +52,7 @@ function LoginForm() {
         //만약 로그인된 상태라면, 기본 페이지로 이동
         useEffect(() => {
             if (userState) {
-                navigate('*');
+                navigate('/rank/list');
             }
         });
     };

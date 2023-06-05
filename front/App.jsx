@@ -71,6 +71,7 @@ function App() {
                         <Route path="/" exact element={<MainPage />} />
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
+                        {/* <Route path="/rank/list" element = {<Rank />} /> */}
                         {/* <Route path="/story" element={<Story />} />
                         <Route path="/story/:postId" element={<PostDetail />} />
                         <Route path="*" element={<Rank />} /> */}
