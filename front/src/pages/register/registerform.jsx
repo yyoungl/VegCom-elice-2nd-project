@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { UserStateContext } from '../../../App';
 import * as Api from '../../../api.jsx';
 
 function RegisterForm() {
@@ -27,19 +28,22 @@ function RegisterForm() {
     const isFormValid = isEmailValid && isPasswordValid && isPasswordSame && isNicknameValid;
 
     const handleSubmit = async e => {
-        e.preventDefault();
-
         try {
-            await Api.post('user/register', {
+            const res = await Api.post('user/register', {
                 email,
                 password,
                 nickname,
             });
 
+            alert(res.successMessage);
+
             // 로그인 페이지로 이동함.
             navigate('/login');
         } catch (err) {
-            alert('회원가입에 실패하였습니다.서버를 확인해주세요.');
+            if (err.response.status === 400) {
+                alert(err.response.data.error);
+            }
+            console.log('회원가입에 실패하였습니다.', err);
         }
     };
 
@@ -54,7 +58,7 @@ function RegisterForm() {
             </div>
 
             <div>
-                <form onSubmit={handleSubmit} style={{ alignItems: 'center' }}>
+                <div onSubmit={handleSubmit} style={{ alignItems: 'center' }}>
                     {/* 이메일 입력창 */}
                     <div className="space-y-15">
                         <div className="border-b border-gray-900/10 pb-12">
@@ -186,7 +190,7 @@ function RegisterForm() {
                             </button>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );

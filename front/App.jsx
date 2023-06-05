@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Api from './api';
 import { loginReducer } from './reducer';
 
-// import Header from './src/sections/header';
+import Header from './src/sections/header';
 // import Footer from './src/sections/footer';
 
 import LoginForm from './src/pages/login/loginform.jsx';
@@ -15,6 +15,8 @@ import MainPage from './src/pages/mainpage/mainpage.jsx';
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
+
+// const isLogin = !!userState.user;
 
 function App() {
     // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
@@ -59,14 +61,19 @@ function App() {
         <DispatchContext.Provider value={dispatch}>
             <UserStateContext.Provider value={userState}>
                 <Router>
-                    {/* <Header /> */}
+                    {/* {isLogin && (
+                        <>
+                            <Header />
+                        </>
+                    )} */}
+                    <Header />
                     <Routes>
                         <Route path="/" exact element={<MainPage />} />
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
-                {/* <Route path="/story" element={<Story />} />
-                <Route path="/story/:postId" element={<PostDetail />} />
-                <Route path="*" element={<Rank />} /> */}
+                        {/* <Route path="/story" element={<Story />} />
+                        <Route path="/story/:postId" element={<PostDetail />} />
+                        <Route path="*" element={<Rank />} /> */}
                     </Routes>
                     {/* <Footer /> */}
                 </Router>

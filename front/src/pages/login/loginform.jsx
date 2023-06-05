@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Api from '../../../api';
-import { DispatchContext } from '../../../App';
-
+import { UserStateContext, DispatchContext } from '../../../App';
 
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useContext(DispatchContext);
+    const userState = useContext(UserStateContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,8 +28,6 @@ function LoginForm() {
     const isFormValid = isEmailValid && isPasswordValid;
 
     const handleSubmit = async e => {
-        e.preventDefault();
-
         try {
             const res = await Api.post('user/login', {
                 email,
@@ -51,8 +49,13 @@ function LoginForm() {
                 alert('로그인에 실패하였습니다.');
             }
         }
+        //만약 로그인된 상태라면, 기본 페이지로 이동
+        useEffect(() => {
+            if (userState) {
+                navigate('*');
+            }
+        });
     };
-
 
     return (
         <div className="login-page">
@@ -63,7 +66,7 @@ function LoginForm() {
                     className="logo"
                     style={{ width: '500px', height: 'auto', maxWidht: '40vh' }}></img>
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col">
+            <div onSubmit={handleSubmit} className="flex flex-col">
                 <div className="flex items-center my-2">
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 mr-2 w-24">
                         Email
@@ -95,17 +98,24 @@ function LoginForm() {
                 </div>
 
                 <div className="mt-8 flex justify-center text-lg text-black">
-                    <button 
-                        type="submit" 
-                        disabled={!isFormValid} 
-                        className={`rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 ${isFormValid ? 'bg-yellow-400 hover:bg-yellow-600' : 'bg-gray-400 cursor-not-allowed'}`}>
+                    <button
+                        type="button"
+                        className="rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-30 mr-3"
+                        onClick={() => navigate('/register')}
+                        style={{ color: 'black' }}>
+                        회원가입하기
+                    </button>
+                    <button
+                        type="submit"
+                        disabled={!isFormValid}
+                        className={`rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 ${
+                            isFormValid ? 'bg-yellow-400 hover:bg-yellow-600' : 'bg-gray-400 cursor-not-allowed'
+                        }`}>
                         Login
                     </button>
-                    
                 </div>
-            </form>
-
-    </div>    
+            </div>
+        </div>
     );
 }
 
