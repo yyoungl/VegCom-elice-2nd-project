@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-// import { UserStateContext, DispatchContext } from '../App';
+import { UserStateContext, DispatchContext } from '../../App';
 
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
@@ -13,12 +13,15 @@ function Header() {
         { name: '랭킹', description: '랭킹 페이지로 이동', href: '*', icon: TrophyIcon },
         // {name: '쇼핑'},
     ];
-
     const menusBelow = [{ name: '로그아웃', href: '/', icon: ArrowLeftOnRectangleIcon }];
-    // const navigate = useNavigate();
-    // const location = useLocation();
 
+    // const location = useLocation();
+    // console.log('useLocation', location);
     // const userState = useContext(UserStateContext);
+    // console.log('state', userState);
+
+    // const navigate = useNavigate();
+
     // const dispatch = useContext(DispatchContext);
 
     // const isLogin = !!userState.user;
