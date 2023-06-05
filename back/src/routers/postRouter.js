@@ -4,7 +4,30 @@ import { postController } from '../controllers/postController.js';
 
 const postRouter = Router();
 
-// 1. 피드 작성
+// 1. 전체 피드 시간순
+postRouter.get('/list', async function (req, res, next) {
+    try {
+        const posts = await postController.getAllPosts();
+
+        res.status(posts.statusCode).send(posts.response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 2. 피드 상세페이지
+postRouter.get('/:postId', async function (req, res, next) {
+    try {
+        const postId = req.params.postId;
+        const post = await postController.getPost({ postId });
+
+        res.status(post.statusCode).send(post.response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 3. 피드 작성
 postRouter.post('/', async function (req, res, next) {
     try {
         // const userId = req.currentUserId;
@@ -18,7 +41,7 @@ postRouter.post('/', async function (req, res, next) {
     }
 });
 
-// 2. 피드 수정
+// 4. 피드 수정
 postRouter.put('/:postId', async function (req, res, next) {
     try {
         const postId = req.params.postId;
@@ -32,7 +55,7 @@ postRouter.put('/:postId', async function (req, res, next) {
     }
 });
 
-// 3. 피드 삭제
+// 5. 피드 삭제
 postRouter.delete('/:postId', async function (req, res, next) {
     try {
         const postId = req.params.postId;
@@ -42,27 +65,6 @@ postRouter.delete('/:postId', async function (req, res, next) {
     } catch (error) {
         next(error);
     }
-});
-
-// 4. 피드 상세페이지
-postRouter.get('/:postId', async function (req, res, next) {
-    try {
-        const postId = req.params.postId;
-        const post = await postController.getPost({ postId });
-
-        res.status(post.statusCode).send(post.response);
-    } catch (error) {
-        next(error);
-    }
-});
-
-// 5. 전체 피드 시간순
-postRouter.get('/list', async function (req, res, next) {
-    console.log('어디까지 안되나?');
-
-    const posts = await postController.getAllPosts();
-
-    res.status(200).send(posts);
 });
 
 export { postRouter };

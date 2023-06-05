@@ -1,7 +1,25 @@
 import { Post } from '../db/index.js';
 
 class postService {
-    //1. 피드 작성하기
+    //1. 전체 피드 시간순
+    static async getAllPosts() {
+        const posts = await Post.getAllPosts();
+
+        return posts;
+    }
+
+    //2. 피드 상세페이지
+    static async getPost({ postId }) {
+        const post = await Post.getPost({ postId });
+
+        if (!post) {
+            throw new Error('게시물 조회를 실패했습니다.');
+        }
+
+        return post;
+    }
+
+    //3. 피드 작성하기
     static async createPost({ userId, content, isPrivate }) {
         const post = await Post.create({
             userId,
@@ -18,7 +36,7 @@ class postService {
         return createdPost;
     }
 
-    //2. 피드 수정하기
+    //4. 피드 수정하기
     static async setPost({ postId, toUpdate }) {
         let post = await Post.getPost({ postId });
 
@@ -32,7 +50,7 @@ class postService {
             post = await Post.update({ postId, fieldToUpdate, newValue });
         }
 
-        if (toUpdate.isPrivate) {
+        if (toUpdate.isPrivate !== null) {
             const fieldToUpdate = 'isPrivate';
             const newValue = toUpdate.isPrivate;
             post = await Post.update({ postId, fieldToUpdate, newValue });
@@ -43,7 +61,7 @@ class postService {
         return updatedPost;
     }
 
-    //3. 피드 삭제하기
+    //5. 피드 삭제하기
     static async delPost({ postId }) {
         const post = await Post.getPost({ postId });
 
@@ -56,24 +74,6 @@ class postService {
         const deletedPost = await Post.getPost({ postId });
 
         return deletedPost;
-    }
-
-    //4. 피드 상세페이지
-    static async getPost({ postId }) {
-        const post = await Post.getPost({ postId });
-
-        if (!post) {
-            throw new Error('게시물 조회를 실패했습니다.');
-        }
-
-        return post;
-    }
-
-    //5. 전체 피드 시간순
-    static async getAllPosts() {
-        const posts = await Post.getAllPosts();
-
-        return posts;
     }
 }
 
