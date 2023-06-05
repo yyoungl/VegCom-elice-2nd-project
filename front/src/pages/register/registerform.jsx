@@ -27,14 +27,13 @@ function RegisterForm() {
     const isFormValid = isEmailValid && isPasswordValid && isPasswordSame && isNicknameValid;
 
     const handleSubmit = async e => {
-        e.preventDefault();
-
         try {
             const res = await Api.post('user/register', {
                 email,
                 password,
                 nickname,
             });
+
             alert(res.successMessage);
 
             // 로그인 페이지로 이동함.

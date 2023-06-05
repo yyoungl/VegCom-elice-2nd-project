@@ -27,8 +27,6 @@ function LoginForm() {
     const isFormValid = isEmailValid && isPasswordValid;
 
     const handleSubmit = async e => {
-        e.preventDefault();
-
         try {
             const res = await Api.post('user/login', {
                 email,
@@ -61,7 +59,7 @@ function LoginForm() {
                     className="logo"
                     style={{ width: '500px', height: 'auto', maxWidht: '40vh' }}></img>
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col">
+            <div onSubmit={handleSubmit} className="flex flex-col">
                 <div className="flex items-center my-2">
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 mr-2 w-24">
                         Email
@@ -109,7 +107,7 @@ function LoginForm() {
                         Login
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     );
 }
