@@ -23,6 +23,10 @@ const errors = {
     NotAuthenticatedError: createError('NotAuthenticatedError', '로그인한 유저만 사용할 수 있는 서비스입니다.', 401),
     // 서버 오류가 나타나는 경우
     ServerError: createError('ServerError', '서버 오류가 발생했습니다. 다시 시도해주세요.', 500),
+    // 요청한 댓글의 정보를 찾을 수 없는 경우의 오류
+    CommentNotFoundId: createError('CommentNotFoundId', '요청한 댓글의 정보를 찾을 수 없습니다.', 404),
+    // 요청한 게시물의 정보를 찾을 수 없는 경우의 오류
+    PostNotFoundId: createError('PostNotFoundId', '요청한 게시물의 정보를 찾을 수 없습니다.', 404),
 
     // 로그인 실패
     LoginFailedError: createError('LoginFailedError', '로그인에 실패하셨습니다.', 401),
@@ -38,6 +42,14 @@ const errors = {
     UserUpdateFailedError: createError('UserUpdateFailedError', '유저 정보 수정하기에 실패했습니다.', 500),
     // 전체 유저 수 불러오기 실패
     UserDeleteFailedError: createError('UserDeleteFailedError', '유저 정보 삭제하기에 실패했습니다.', 500),
+    // 댓글 추가하기 실패
+    CommentCreateFailedError: createError('CommentCreateFailedError', '댓글 추가하기에 실패했습니다.', 500),
+    // 댓글 수정하기 실패
+    CommentUpdateFailedError: createError('CommentUpdateFailedError', '댓글 수정하기에 실패했습니다.', 500),
+    // 댓글 삭제하기 실패
+    CommentDeleteFailedError: createError('CommentDeleteFailedError', '댓글 삭제하기에 실패했습니다.', 500),
+    // 게시물 전체 댓글 불러오기 실패
+    PostCommentsLoadFailedError: createError('PostCommentsLoadFailedError', '게시글 총 댓글 불러오기에 실패했습니다.', 500),
 };
 
 export default errors;
