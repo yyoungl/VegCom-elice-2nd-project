@@ -4,10 +4,7 @@ import Navigator from '../../sections/navigator';
 import Header from '../../sections/header';
 
 function Rank() {
-    return (
-        <Header />
-    )
-    
+    return <Header />;
 }
 
-export default Rank
+export default Rank;
