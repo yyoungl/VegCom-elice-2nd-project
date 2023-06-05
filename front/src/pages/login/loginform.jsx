@@ -27,6 +27,12 @@ function LoginForm() {
     const isPasswordValid = password.length >= 4;
     const isFormValid = isEmailValid && isPasswordValid;
 
+    useEffect(() => {
+        if (userState.user) {
+            navigate('/rank/list');
+        }
+    });
+
     const handleSubmit = async e => {
         try {
             const res = await Api.post('user/login', {
@@ -50,11 +56,6 @@ function LoginForm() {
             }
         }
         //만약 로그인된 상태라면, 기본 페이지로 이동
-        useEffect(() => {
-            if (userState) {
-                navigate('/rank/list');
-            }
-        });
     };
 
     return (
