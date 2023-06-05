@@ -10,7 +10,7 @@ import Header from './src/sections/header';
 import LoginForm from './src/pages/login/loginform.jsx';
 import RegisterForm from './src/pages/register/registerform';
 import MainPage from './src/pages/mainpage/mainpage.jsx';
-// import Rank from './src/pages/rank/rank';
+import Rank from './src/pages/rank/rank';
 // import PostDetail from './src/pages/postdetail/postdetail.jsx';
 
 export const UserStateContext = createContext(null);
@@ -72,8 +72,8 @@ function App() {
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
                         {/* <Route path="/story" element={<Story />} />
-                        <Route path="/story/:postId" element={<PostDetail />} />
-                        <Route path="*" element={<Rank />} /> */}
+                        <Route path="/story/:postId" element={<PostDetail />} /> */}
+                        <Route path="/rank/list" element={<Rank />} />
                     </Routes>
                     {/* <Footer /> */}
                 </Router>
