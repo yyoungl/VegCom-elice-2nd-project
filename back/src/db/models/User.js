@@ -57,6 +57,16 @@ class User {
 
         return rows[0];
     }
+
+    //유저의 행갯수를 다 가져옴.
+    static async getCount() {
+        const query = 'SELECT COUNT(*) AS totalRows FROM user';
+        const [rows] = await mysqlDB.query(query);
+      
+        const totalRows = rows[0].totalRows;
+        return totalRows;
+      }
+      
 }
 
 export { User };

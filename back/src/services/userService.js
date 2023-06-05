@@ -208,6 +208,15 @@ class userAuthService {
 
         return userPoint;
     }
+
+    //총 유저 카운트
+    static async getUserCount() {
+
+          const count = await User.getCount();
+          return count;
+
+        } 
+    
 }
 
 export { userAuthService };
