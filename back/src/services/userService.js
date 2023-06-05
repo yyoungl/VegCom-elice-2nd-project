@@ -11,16 +11,16 @@ class userAuthService {
         // 이메일 검증
         if (!user) {
             const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            return { errorMessage };
+            throw new Error(errorMessage);
         }
 
         // 비밀번호 확인
         const correctPasswordHash = user.password;
         const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
-        // const isPasswordCorrect = password == correctPasswordHash;
+
         if (!isPasswordCorrect) {
             const errorMessage = '비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.';
-            return { errorMessage };
+            throw new Error(errorMessage);
         }
 
         // 유저 정보가 있고 비밀번호가 일치하면 JWT 토큰을 생성한다.
@@ -45,13 +45,54 @@ class userAuthService {
         return loginUser;
     }
 
+    // 유저 생성
+    static async createUser({ email, password, nickname }) {
+        // 이메일 중복 확인
+        const user = await User.findByEmail({ email });
+        if (user) {
+            const errorMessage = '이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.';
+            throw new Error(errorMessage);
+        }
+
+        // 비밀번호 암호화
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const createUser = await User.create({
+            email,
+            password: hashedPassword,
+            nickname,
+        });
+
+        let createdUser = {};
+
+        if (createUser.affectedRows > 0) {
+            createdUser = {
+                email,
+                password,
+                nickname,
+                successMessage: '회원가입에 성공하였습니다.',
+                errorMessage: null,
+            };
+        } else {
+            createdUser = {
+                email,
+                password,
+                nickname,
+                successMessage: null,
+                errorMessage: '회원가입에 실패하였습니다. 입력값을 확인해주세요.',
+            };
+        }
+
+        return createdUser;
+    }
+
     // ID로 유저 검색
     static async getUserInfo({ userId }) {
         const user = await User.findById({ userId });
 
         if (!user) {
             const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            return { errorMessage };
+            throw new Error(errorMessage);
         }
 
         const selectedUser = {
@@ -66,55 +107,69 @@ class userAuthService {
         return selectedUser;
     }
 
-    // 유저 생성
-    static async createUser({ email, password, nickname }) {
-        // 이메일 중복 확인
-        const user = await User.findByEmail({ email });
-        if (user) {
-            const errorMessage = '이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.';
-            return { errorMessage };
-        }
-
-        // 비밀번호 암호화
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const createUser = await User.create({
-            email,
-            password: hashedPassword,
-            nickname,
-        });
-
-        return createUser;
-    }
-
     // 유저 정보 수정(별명, 설명)
-    static async setUser({ userId, toUpdate }) {
-        let user = await User.findById({ userId });
-
-        if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            return { errorMessage };
-        }
-
-        // toUpdate -> nickName, description
-        for (const [fieldToUpdate, newValue] of Object.entries(toUpdate)) {
-            user = await User.update({ userId, fieldToUpdate, newValue });
-        }
-
-        return user;
-    }
-
-    // 유저 정보 삭제
-    static async deleteUser({ userId }) {
+    static async setUserInfo({ userId, toUpdate }) {
         const user = await User.findById({ userId });
 
         if (!user) {
             const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            return { errorMessage };
+            throw new Error(errorMessage);
+        }
+
+        let updateUser = {};
+
+        // toUpdate -> nickName, description
+        for (const [fieldToUpdate, newValue] of Object.entries(toUpdate)) {
+            updateUser = await User.update({ userId, fieldToUpdate, newValue });
+        }
+
+        let updatedUser = {};
+        if (updateUser.changedRows > 0) {
+            updatedUser = {
+                nickname: fieldToUpdate,
+                description: newValue,
+                successMessage: '유저 정보 수정에 성공하였습니다.',
+                errorMessage: null,
+            };
+        } else {
+            updatedUser = {
+                nickname: fieldToUpdate,
+                description: newValue,
+                successMessage: null,
+                errorMessage: '유저 정보 수정에 실패하였습니다. 입력값을 확인해주세요.',
+            };
+        }
+
+        return updatedUser;
+    }
+
+    // 유저 정보 삭제
+    static async delUserInfo({ userId }) {
+        const user = await User.findById({ userId });
+
+        if (!user) {
+            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+            throw new Error(errorMessage);
         }
 
         const deleteUser = await User.delete({ userId });
-        return deleteUser;
+
+        let deletedUser = {};
+        if (deleteUser.affectedRows > 0) {
+            deletedUser = {
+                userId,
+                successMessage: '유저 정보 삭제에 성공하였습니다.',
+                errorMessage: null,
+            };
+        } else {
+            deletedUser = {
+                userId,
+                successMessage: null,
+                errorMessage: '유저 정보 삭제에 실패하였습니다. 입력값을 확인해주세요.',
+            };
+        }
+
+        return deletedUser;
     }
 
     // 유저의 현재 포인트, 누적 포인트 불러오기
@@ -123,7 +178,7 @@ class userAuthService {
 
         if (!user) {
             const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            return { errorMessage };
+            throw new Error(errorMessage);
         }
 
         const getUserPoint = await User.getPoint({ userId });
@@ -145,7 +200,7 @@ class userAuthService {
 
         if (!user) {
             const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            return { errorMessage };
+            throw new Error(errorMessage);
         }
 
         const getUserCount = await User.getCount({ userId });

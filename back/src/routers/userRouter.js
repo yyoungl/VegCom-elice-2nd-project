@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { login_required } from '../middlewares/login_required.js';
-import { userAuthService } from '../services/userService.js';
+import { userAuthController } from '../controllers/userController.js';
 
 const userAuthRouter = Router();
 
@@ -9,14 +9,9 @@ userAuthRouter.post('/register', async function (req, res, next) {
     try {
         const { email, password, nickname } = req.body;
 
-        const createUser = await userAuthService.createUser({ email, password, nickname });
+        const createUser = await userAuthController.register({ email, password, nickname });
 
-        if (createUser.errorMessage) {
-            res.status(400).send({ error: createUser.errorMessage });
-            throw new Error(createUser.errorMessage);
-        }
-
-        res.status(200).send(createUser);
+        res.status(createUser.statusCode).send(createUser.response);
     } catch (error) {
         next(error);
     }
@@ -27,14 +22,9 @@ userAuthRouter.post('/login', async function (req, res, next) {
     try {
         const { email, password } = req.body;
 
-        const user = await userAuthService.getUser({ email, password });
+        const user = await userAuthController.login({ email, password });
 
-        if (user.errorMessage) {
-            res.status(400).send({ error: user.errorMessage });
-            throw new Error(user.errorMessage);
-        }
-
-        res.status(200).send(user);
+        res.status(user.statusCode).send(user.response);
     } catch (error) {
         next(error);
     }
@@ -44,13 +34,9 @@ userAuthRouter.post('/login', async function (req, res, next) {
 userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
     try {
         const userId = req.currentUserId;
-        const currentUserInfo = await userAuthService.getUserInfo({ userId });
+        const currentUserInfo = await userAuthController.isLogin({ userId });
 
-        if (currentUserInfo.errorMessage) {
-            throw new Error(currentUserInfo.errorMessage);
-        }
-
-        res.status(200).send(currentUserInfo);
+        res.status(currentUserInfo.statusCode).send(currentUserInfo.response);
     } catch (error) {
         next(error);
     }
@@ -60,14 +46,9 @@ userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
 userAuthRouter.get('/point', login_required, async function (req, res, next) {
     try {
         const userId = req.currentUserId;
-        const userPoint = await userAuthService.getUserPoint({ userId });
+        const userPoint = await userAuthController.getPoint({ userId });
 
-        if (userPoint.errorMessage) {
-            res.status(400).send({ error: deletedUser.errorMessage });
-            throw new Error(userPoint.errorMessage);
-        }
-
-        res.status(200).send(userPoint);
+        res.status(userPoint.statusCode).send(userPoint.response);
     } catch (error) {
         next(error);
     }
@@ -77,15 +58,9 @@ userAuthRouter.get('/point', login_required, async function (req, res, next) {
 userAuthRouter.get('/userCount', login_required, async function (req, res, next) {
     try {
         const userId = req.currentUserId;
-        console.log(userId);
-        const userCount = await userAuthService.getUserCount({ userId });
+        const userCount = await userAuthController.getCount({ userId });
 
-        if (userCount.errorMessage) {
-            res.status(400).send({ error: userCount.errorMessage });
-            throw new Error(userCount.errorMessage);
-        }
-
-        res.status(200).send(userCount);
+        res.status(userCount.statusCode).send(userCount.response);
     } catch (error) {
         next(error);
     }
@@ -95,14 +70,9 @@ userAuthRouter.get('/userCount', login_required, async function (req, res, next)
 userAuthRouter.get('/:userId', login_required, async function (req, res, next) {
     try {
         const userId = req.params.userId;
-        const user = await userAuthService.getUserInfo({ userId });
+        const user = await userAuthController.getInfo({ userId });
 
-        if (user.errorMessage) {
-            res.status(400).send({ error: user.errorMessage });
-            throw new Error(user.errorMessage);
-        }
-
-        res.status(200).send(user);
+        res.status(user.statusCode).send(user.response);
     } catch (error) {
         next(error);
     }
@@ -114,14 +84,9 @@ userAuthRouter.put('/:userId', login_required, async function (req, res, next) {
         const userId = req.params.userId;
         const { nickname, description } = req.body;
         const toUpdate = { nickname, description };
-        const updatedUser = await userAuthService.setUser({ userId, toUpdate });
+        const updatedUser = await userAuthController.setInfo({ userId, toUpdate });
 
-        if (updatedUser.errorMessage) {
-            res.status(400).send({ error: updatedUser.errorMessage });
-            throw new Error(updatedUser.errorMessage);
-        }
-
-        res.status(200).send(updatedUser);
+        res.status(updatedUser.statusCode).send(updatedUser.response);
     } catch (error) {
         next(error);
     }
@@ -131,14 +96,9 @@ userAuthRouter.put('/:userId', login_required, async function (req, res, next) {
 userAuthRouter.delete('/:userId', login_required, async function (req, res, next) {
     try {
         const userId = req.params.userId;
-        const deletedUser = await userAuthService.deleteUser(userId);
+        const deletedUser = await userAuthController.delInfo(userId);
 
-        if (deletedUser.errorMessage) {
-            res.status(400).send({ error: deletedUser.errorMessage });
-            throw new Error(deletedUser.errorMessage);
-        }
-
-        res.status(200).send(deletedUser);
+        res.status(deletedUser.statusCode).send(deletedUser.response);
     } catch (error) {
         next(error);
     }
