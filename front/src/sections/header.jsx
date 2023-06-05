@@ -15,6 +15,14 @@ function Header() {
     ];
     const menusBelow = [{ name: '로그아웃', href: '/', icon: ArrowLeftOnRectangleIcon }];
 
+    const dispatch = useContext(DispatchContext);
+
+    const logout = () => {
+        sessionStorage.removeItem('userToken');
+        dispatch({ type: 'LOGOUT' });
+        navigate('/');
+    };
+
     // const location = useLocation();
     // console.log('useLocation', location);
     // const userState = useContext(UserStateContext);
@@ -81,6 +89,7 @@ function Header() {
                                     {menusBelow.map(item => (
                                         <a
                                             key={item.name}
+                                            onClick={item.name === '로그아웃' ? logout : null}
                                             href={item.href}
                                             className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100">
                                             <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
