@@ -35,13 +35,15 @@ const errors = {
     // 포인트 불러오기 실패
     PointLoadFailedError: createError('PointLoadFailedError', '포인트 불러오기에 실패했습니다.', 500),
     // 전체 유저 수 불러오기 실패
-    UserCountLoadFailedError: createError('UserCountLoadFailedError', '총 수 불러오기에 실패했습니다.', 500),
-    // 전체 유저 수 불러오기 실패
+    UserCountLoadFailedError: createError('UserCountLoadFailedError', '전체 유저 수 불러오기에 실패했습니다.', 500),
+    // 유저 정보 불러오기 실패
     UserLoadFailedError: createError('UserLoadFailedError', '유저 정보 불러오기에 실패했습니다.', 500),
-    // 전체 유저 수 불러오기 실패
+    // 유저 정보 수정하기 실패
     UserUpdateFailedError: createError('UserUpdateFailedError', '유저 정보 수정하기에 실패했습니다.', 500),
-    // 전체 유저 수 불러오기 실패
+    // 유저 정보 삭제하기 실패
     UserDeleteFailedError: createError('UserDeleteFailedError', '유저 정보 삭제하기에 실패했습니다.', 500),
+    // 랭킹 정보 불러오기 실패
+    RankLoadFailedError: createError('RankLoadFailedError', '랭킹 정보 불러오기에 실패했습니다.', 500),
     // 댓글 추가하기 실패
     CommentCreateFailedError: createError('CommentCreateFailedError', '댓글 추가하기에 실패했습니다.', 500),
     // 댓글 수정하기 실패

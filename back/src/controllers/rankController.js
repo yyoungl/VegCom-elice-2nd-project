@@ -14,7 +14,7 @@ class rankController {
             if (error.name === 'UserNotFoundId') {
                 throw errors.UserNotFoundId;
             } else {
-                throw errors.test;
+                throw errors.RankLoadFailedError;
             }
         }
     }
