@@ -66,7 +66,7 @@ function LoginForm() {
                     className="logo"
                     style={{ width: '500px', height: 'auto', maxWidht: '40vh' }}></img>
             </div>
-            <div onSubmit={handleSubmit} className="flex flex-col">
+            <div className="flex flex-col">
                 <div className="flex items-center my-2">
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 mr-2 w-24">
                         Email
@@ -107,6 +107,7 @@ function LoginForm() {
                     </button>
                     <button
                         type="submit"
+                        onClick={handleSubmit}
                         disabled={!isFormValid}
                         className={`rounded-3xl px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 ${
                             isFormValid ? 'bg-yellow-400 hover:bg-yellow-600' : 'bg-gray-400 cursor-not-allowed'
