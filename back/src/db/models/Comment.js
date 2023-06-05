@@ -36,7 +36,7 @@ class Comment {
     // 전체 댓글 불러오기
     static async select({ postId }) {
         const query =
-            'SELECT comment.userId, user.nickname, user.userImage, comment.content FROM comment JOIN user ON comment.userId = user.id WHERE postId = ?';
+            'SELECT comment.userId, user.nickname, user.userImage, comment.content FROM comment JOIN user ON comment.userId = user.id WHERE postId = ? ORDER BY comment.createAt desc';
         const [rows] = await mysqlDB.query(query, [postId]);
 
         return rows;
