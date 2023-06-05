@@ -1,4 +1,5 @@
 import { userAuthService } from '../services/userService.js';
+import errors from '../../errors.js';
 
 class userAuthController {
     static async login({ email, password }) {
@@ -11,14 +12,17 @@ class userAuthController {
             };
         } catch (error) {
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'UserNotFoundEmail') {
+                throw errors.UserNotFoundEmail;
+            } else if (error.name === 'InvalidCredentials') {
+                throw errors.InvalidCredentials;
+            } else {
+                throw errors.LoginFailedError;
+            }
         }
     }
 
-    static async register({ email, password }) {
+    static async register({ email, password, nickname }) {
         try {
             const user = await userAuthService.createUser({ email, password, nickname });
             // 성공적인 응답 반환
@@ -27,11 +31,13 @@ class userAuthController {
                 response: user,
             };
         } catch (error) {
+            console.log(error);
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'EmailAlreadyExists') {
+                throw errors.EmailAlreadyExists;
+            } else {
+                throw errors.RegistrationFailedError;
+            }
         }
     }
 
@@ -45,10 +51,11 @@ class userAuthController {
             };
         } catch (error) {
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'UserNotFoundId') {
+                throw errors.UserNotFoundId;
+            } else {
+                throw errors.InvalidToken;
+            }
         }
     }
 
@@ -62,10 +69,11 @@ class userAuthController {
             };
         } catch (error) {
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'InvalidToken') {
+                throw errors.InvalidToken;
+            } else {
+                throw errors.PointLoadFailedError;
+            }
         }
     }
 
@@ -79,10 +87,11 @@ class userAuthController {
             };
         } catch (error) {
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'InvalidToken') {
+                throw errors.InvalidToken;
+            } else {
+                throw errors.UserCountLoadFailedError;
+            }
         }
     }
 
@@ -96,10 +105,11 @@ class userAuthController {
             };
         } catch (error) {
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'UserNotFoundId') {
+                throw errors.UserNotFoundId;
+            } else {
+                throw errors.UserLoadFailedError;
+            }
         }
     }
 
@@ -113,16 +123,17 @@ class userAuthController {
             };
         } catch (error) {
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'UserNotFoundId') {
+                throw errors.UserNotFoundId;
+            } else {
+                throw errors.UserUpdateFailedError;
+            }
         }
     }
 
-    static async delInfo({ userId, toUpdate }) {
+    static async delInfo({ userId }) {
         try {
-            const user = await userAuthService.delUserInfo({ userId, toUpdate });
+            const user = await userAuthService.delUserInfo({ userId });
             // 성공적인 응답 반환
             return {
                 statusCode: 200,
@@ -130,10 +141,11 @@ class userAuthController {
             };
         } catch (error) {
             // 오류 발생 시 오류 응답 반환
-            return {
-                statusCode: 400,
-                response: { error: error.message },
-            };
+            if (error.name === 'UserNotFoundId') {
+                throw errors.UserNotFoundId;
+            } else {
+                throw errors.UserDeleteFailedError;
+            }
         }
     }
 }

@@ -96,7 +96,7 @@ userAuthRouter.put('/:userId', login_required, async function (req, res, next) {
 userAuthRouter.delete('/:userId', login_required, async function (req, res, next) {
     try {
         const userId = req.params.userId;
-        const deletedUser = await userAuthController.delInfo(userId);
+        const deletedUser = await userAuthController.delInfo({ userId });
 
         res.status(deletedUser.statusCode).send(deletedUser.response);
     } catch (error) {

@@ -1,4 +1,6 @@
 import { User } from '../db/index.js';
+import errors from '../../errors.js';
+
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -10,8 +12,7 @@ class userAuthService {
 
         // 이메일 검증
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.UserNotFoundEmail;
         }
 
         // 비밀번호 확인
@@ -19,8 +20,7 @@ class userAuthService {
         const isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
 
         if (!isPasswordCorrect) {
-            const errorMessage = '비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.InvalidCredentials;
         }
 
         // 유저 정보가 있고 비밀번호가 일치하면 JWT 토큰을 생성한다.
@@ -49,9 +49,9 @@ class userAuthService {
     static async createUser({ email, password, nickname }) {
         // 이메일 중복 확인
         const user = await User.findByEmail({ email });
+
         if (user) {
-            const errorMessage = '이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.EmailAlreadyExists;
         }
 
         // 비밀번호 암호화
@@ -91,8 +91,7 @@ class userAuthService {
         const user = await User.findById({ userId });
 
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.UserNotFoundId;
         }
 
         const selectedUser = {
@@ -112,8 +111,7 @@ class userAuthService {
         const user = await User.findById({ userId });
 
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.UserNotFoundId;
         }
 
         let updateUser = {};
@@ -148,8 +146,7 @@ class userAuthService {
         const user = await User.findById({ userId });
 
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.UserNotFoundId;
         }
 
         const deleteUser = await User.delete({ userId });
@@ -177,8 +174,7 @@ class userAuthService {
         const user = await User.findById({ userId });
 
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.InvalidToken;
         }
 
         const getUserPoint = await User.getPoint({ userId });
@@ -199,8 +195,7 @@ class userAuthService {
         const user = await User.findById({ userId });
 
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-            throw new Error(errorMessage);
+            throw errors.InvalidToken;
         }
 
         const getUserCount = await User.getCount({ userId });
