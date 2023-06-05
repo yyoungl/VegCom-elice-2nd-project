@@ -26,8 +26,8 @@ app.get('/', (req, res) => {
 
 // router, service 구현 (userAuthRouter는 맨 위에 있어야 함.)
 app.use('/user', userAuthRouter);
-app.use('/rank', rankRouter);
-app.use('/comment', commentRouter);
+app.use('/rank', login_required, rankRouter);
+app.use('/comment', login_required, commentRouter);
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);

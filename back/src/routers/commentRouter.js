@@ -5,7 +5,7 @@ import { commentController } from '../controllers/commentController.js';
 const commentRouter = Router();
 
 // 댓글 작성하기
-commentRouter.post('/', login_required, async function (req, res, next) {
+commentRouter.post('/', async function (req, res, next) {
     try {
         const userId = req.currentUserId;
         const { postId, content } = req.body;
@@ -19,7 +19,7 @@ commentRouter.post('/', login_required, async function (req, res, next) {
 });
 
 // 댓글 수정하기
-commentRouter.put('/:commentId', login_required, async function (req, res, next) {
+commentRouter.put('/:commentId', async function (req, res, next) {
     try {
         const userId = req.currentUserId;
         const commentId = req.params.commentId;
@@ -34,7 +34,7 @@ commentRouter.put('/:commentId', login_required, async function (req, res, next)
 });
 
 // 댓글 삭제하기
-commentRouter.delete('/:commentId', login_required, async function (req, res, next) {
+commentRouter.delete('/:commentId', async function (req, res, next) {
     try {
         const userId = req.currentUserId;
         const commentId = req.params.commentId;
@@ -48,7 +48,7 @@ commentRouter.delete('/:commentId', login_required, async function (req, res, ne
 });
 
 // 게시물에 해당하는 댓글 불러오기
-commentRouter.get('/:postId', login_required, async function (req, res, next) {
+commentRouter.get('/:postId', async function (req, res, next) {
     try {
         const userId = req.currentUserId;
         const postId = req.params.postId;

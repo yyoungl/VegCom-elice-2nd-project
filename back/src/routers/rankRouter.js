@@ -4,7 +4,7 @@ import { rankController } from '../controllers/rankController.js';
 
 const rankRouter = Router();
 
-rankRouter.get('/list', login_required, async function (req, res, next) {
+rankRouter.get('/list', async function (req, res, next) {
     try {
         const userId = req.currentUserId;
         const user = await rankController.rankList({ userId });
