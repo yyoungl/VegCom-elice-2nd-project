@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { UserStateContext } from '../../../App';
 import * as Api from '../../../api.jsx';
 
 function RegisterForm() {
@@ -57,7 +58,7 @@ function RegisterForm() {
             </div>
 
             <div>
-                <form onSubmit={handleSubmit} style={{ alignItems: 'center' }}>
+                <div onSubmit={handleSubmit} style={{ alignItems: 'center' }}>
                     {/* 이메일 입력창 */}
                     <div className="space-y-15">
                         <div className="border-b border-gray-900/10 pb-12">
@@ -189,7 +190,7 @@ function RegisterForm() {
                             </button>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 

@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Api from '../../../api';
-import { DispatchContext } from '../../../App';
+import { UserStateContext, DispatchContext } from '../../../App';
 
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useContext(DispatchContext);
+    const userState = useContext(UserStateContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -48,6 +49,12 @@ function LoginForm() {
                 alert('로그인에 실패하였습니다.');
             }
         }
+        //만약 로그인된 상태라면, 기본 페이지로 이동
+        useEffect(() => {
+            if (userState) {
+                navigate('*');
+            }
+        });
     };
 
     return (
