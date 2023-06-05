@@ -5,8 +5,8 @@ import { User } from './models/User.js';
 
 const mysqlDBPromise = mysql.createPool({
     host: process.env.DB_IP,
-    user: 'root',
-    password: 'choi36576544!',
+    user: process.env.DB_NAME,
+    password: process.env.DB_PW,
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
 });
