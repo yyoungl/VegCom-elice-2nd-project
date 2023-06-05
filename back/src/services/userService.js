@@ -198,7 +198,7 @@ class userAuthService {
             throw errors.InvalidToken;
         }
 
-        const getUserCount = await User.getCount({ userId });
+        const getUserCount = await User.getCount();
 
         const userPoint = {
             userCount: getUserCount.userCount,
