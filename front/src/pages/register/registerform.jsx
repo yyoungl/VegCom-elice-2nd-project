@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UserStateContext } from '../../../App';
 import * as Api from '../../../api.jsx';
 
 function RegisterForm() {
     const navigate = useNavigate();
+    const userState = useContext(UserStateContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -47,6 +48,13 @@ function RegisterForm() {
         }
     };
 
+    //만약 로그인된 상태라면, 기본 페이지로 이동
+    useEffect(() => {
+        if (userState) {
+            navigate('*');
+        }
+    });
+
     return (
         <div style={{ alignItems: 'center', display: 'center', maxWidth: '700px', width: '75vh' }}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -58,7 +66,7 @@ function RegisterForm() {
             </div>
 
             <div>
-                <div onSubmit={handleSubmit} style={{ alignItems: 'center' }}>
+                <div style={{ alignItems: 'center' }}>
                     {/* 이메일 입력창 */}
                     <div className="space-y-15">
                         <div className="border-b border-gray-900/10 pb-12">
@@ -183,6 +191,7 @@ function RegisterForm() {
                                 로그인하기
                             </button>
                             <button
+                                onClick={handleSubmit}
                                 type="submit"
                                 disabled={!isFormValid}
                                 className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
