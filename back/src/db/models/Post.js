@@ -1,10 +1,10 @@
 import { mysqlDB } from '../index.js';
 
 class Post {
-    //1. 전체 피드 시간순
+    //1. 전체 피드 최신순
     static async getAllPosts() {
         // post를 전체 조회
-        const query = 'SELECT * FROM post';
+        const query = 'SELECT * FROM post ORDER BY createAt DESC';
         const [rows] = await mysqlDB.query(query);
 
         return rows;
