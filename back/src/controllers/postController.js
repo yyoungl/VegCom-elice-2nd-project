@@ -34,9 +34,9 @@ class postController {
     }
 
     // 3. 피드 작성하기
-    static async createPost({ userId, content, isPrivate, imageUrl }) {
+    static async createPost({ userId, content, imageUrl }) {
         try {
-            const post = await postService.createPost({ userId, content, isPrivate, imageUrl });
+            const post = await postService.createPost({ userId, content, imageUrl });
 
             return {
                 statusCode: 200,
@@ -72,7 +72,7 @@ class postController {
             const post = await postService.delPost({ postId });
             return {
                 statusCode: 200,
-                response: post,
+                response: { message: '삭제가 완료되었습니다.' },
             };
         } catch (error) {
             return {

@@ -12,7 +12,7 @@ class postService {
     static async getPost({ postId }) {
         const post = await Post.getPost({ postId });
 
-        if (!post) {
+        if (!post || post.length === 0) {
             throw new Error('게시물 조회를 실패했습니다.');
         }
 
@@ -20,11 +20,10 @@ class postService {
     }
 
     //3. 피드 작성하기
-    static async createPost({ userId, content, isPrivate, imageUrl }) {
+    static async createPost({ userId, content, imageUrl }) {
         const post = await Post.create({
             userId,
             content,
-            isPrivate,
             imageUrl,
         });
 
@@ -41,19 +40,13 @@ class postService {
     static async setPost({ postId, toUpdate }) {
         let post = await Post.getPost({ postId });
 
-        if (!post) {
+        if (!post || post.length === 0) {
             throw new Error('게시물 조회를 실패했습니다.');
         }
 
         if (toUpdate.content) {
             const fieldToUpdate = 'content';
             const newValue = toUpdate.content;
-            post = await Post.update({ postId, fieldToUpdate, newValue });
-        }
-
-        if (toUpdate.isPrivate !== null) {
-            const fieldToUpdate = 'isPrivate';
-            const newValue = toUpdate.isPrivate;
             post = await Post.update({ postId, fieldToUpdate, newValue });
         }
 
@@ -71,15 +64,10 @@ class postService {
     static async delPost({ postId }) {
         const post = await Post.getPost({ postId });
 
-        if (!post) {
+        if (!post || post.length === 0) {
             throw new Error('게시물 조회를 실패했습니다.');
         }
-
         await Post.delete({ postId });
-
-        const deletedPost = await Post.getPost({ postId });
-
-        return deletedPost;
     }
 }
 

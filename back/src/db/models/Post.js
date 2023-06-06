@@ -4,7 +4,7 @@ class Post {
     //1. 전체 피드 최신순
     static async getAllPosts() {
         const query =
-            'SELECT post.*, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId ORDER BY createAt DESC';
+            'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId WHERE deleteYN = "N" ORDER BY createAt DESC';
         const [rows] = await mysqlDB.query(query);
 
         return rows;
@@ -14,20 +14,18 @@ class Post {
     static async getPost({ postId }) {
         // const query = 'SELECT * FROM post WHERE id = ?';
         const query =
-            'SELECT post.*, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId WHERE post.id = ?';
+            'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId WHERE post.id = ? and deleteYN = "N"';
         const [rows] = await mysqlDB.query(query, [postId]);
 
         return rows;
     }
 
     //3. 피드 작성하기
-    static async create({ userId, content, isPrivate, imageUrl }) {
-        const query1 = 'INSERT INTO post (userId, content, isPrivate) VALUES (?, ?, ?)';
+    static async create({ userId, content, imageUrl }) {
+        const query1 = 'INSERT INTO post (userId, content) VALUES (?, ?)';
         const query2 = 'INSERT INTO post_image (postId, imageUrl) VALUES (LAST_INSERT_ID(), ?)';
 
-        // 다중 쿼리를 실행하기 위해서는 'multipleStatements' 옵션을 활성화해야하는데
-        // 보안 상의 문제로는 다중쿼리가 좋진 않다라고 합니다..
-        const [row1] = await mysqlDB.query(query1, [userId, content, isPrivate]);
+        const [row1] = await mysqlDB.query(query1, [userId, content]);
         await mysqlDB.query(query2, [imageUrl]);
         // postId 값을 얻기 위해서는 row1의 값만 알아도 충분함
 
@@ -50,7 +48,7 @@ class Post {
         const query = 'UPDATE post SET deleteYN = "Y", deleteAt = CURRENT_TIMESTAMP WHERE id = ?';
         const [rows] = await mysqlDB.query(query, [postId]);
 
-        return rows;
+        // deleteYN = "Y" 일 경우에만 파일을 보내주므로, 삭제에는 리턴 값이 없어도 될 듯
     }
 }
 

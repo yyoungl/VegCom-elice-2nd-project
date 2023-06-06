@@ -31,9 +31,9 @@ postRouter.post('/', async function (req, res, next) {
     try {
         // const userId = req.currentUserId;
         // 일단 thunder client에서 확인 불가능하기 때문에 userId 값을 body에 넣어서 전달
-        const { userId, content, isPrivate, imageUrl } = req.body;
+        const { userId, content, imageUrl } = req.body;
         // 사진을 어디서 받아와야 하나.. 일단 body에
-        const post = await postController.createPost({ userId, content, isPrivate, imageUrl });
+        const post = await postController.createPost({ userId, content, imageUrl });
 
         res.status(post.statusCode).send(post.response);
     } catch (error) {
@@ -45,9 +45,9 @@ postRouter.post('/', async function (req, res, next) {
 postRouter.put('/:postId', async function (req, res, next) {
     try {
         const postId = req.params.postId;
-        const { content, isPrivate, imageUrl } = req.body;
+        const { content, imageUrl } = req.body;
         // 일단 사진 body로 받게 설정
-        const toUpdate = { content, isPrivate, imageUrl };
+        const toUpdate = { content, imageUrl };
         const post = await postController.setPost({ postId, toUpdate });
 
         res.status(post.statusCode).send(post.response);
