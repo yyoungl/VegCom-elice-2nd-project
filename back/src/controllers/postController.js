@@ -34,9 +34,9 @@ class postController {
     }
 
     // 3. 피드 작성하기
-    static async createPost({ userId, content, isPrivate }) {
+    static async createPost({ userId, content, isPrivate, imageUrl }) {
         try {
-            const post = await postService.createPost({ userId, content, isPrivate });
+            const post = await postService.createPost({ userId, content, isPrivate, imageUrl });
 
             return {
                 statusCode: 200,

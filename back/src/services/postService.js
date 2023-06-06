@@ -20,11 +20,12 @@ class postService {
     }
 
     //3. 피드 작성하기
-    static async createPost({ userId, content, isPrivate }) {
+    static async createPost({ userId, content, isPrivate, imageUrl }) {
         const post = await Post.create({
             userId,
             content,
             isPrivate,
+            imageUrl,
         });
 
         // mySQL은 조작을 하면? ResultSetHeader 형태로 받아와지기 때문에
