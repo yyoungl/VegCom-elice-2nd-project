@@ -19,7 +19,12 @@ class User {
 
     // 유저ID를 이용하여 유저 검색
     static async findById({ userId }) {
-        const query = 'SELECT id, email, nickname, userImage FROM user WHERE id = ? AND deleteAt is null';
+        const query =
+            'SELECT id, email, nickname, user_image.imageUrl as userImage \
+                FROM user \
+                JOIN user_image \
+                ON user.id = user_image.userId \
+                WHERE id = ? AND deleteAt is null';
         const [rows] = await mysqlDB.query(query, [userId]);
 
         return rows[0];
