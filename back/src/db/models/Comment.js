@@ -3,7 +3,7 @@ import { mysqlDB } from '../index.js';
 class Comment {
     // 댓글ID를 이용하여 댓글 검색
     static async findById({ commentId }) {
-        const query = 'SELECT id, content FROM comment WHERE id = ? AND deleteYN = "N"';
+        const query = 'SELECT id, content FROM comment WHERE id = ? AND deleteAt is null';
         const [rows] = await mysqlDB.query(query, [commentId]);
 
         return rows[0];
@@ -43,7 +43,7 @@ class Comment {
             FROM comment \
             JOIN user \
             ON comment.userId = user.id \
-            WHERE postId = ? AND deleteYN "N" \
+            WHERE postId = ? AND comment.deleteAt is null AND user.deleteAt is null \
             ORDER BY comment.createAt desc';
         const [rows] = await mysqlDB.query(query, [postId]);
 

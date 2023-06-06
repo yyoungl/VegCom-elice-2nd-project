@@ -1,78 +1,86 @@
 import { commentService } from '../services/commentService.js';
-import errors from '../../errors.js';
+import { UnauthorizedError, BadRequestError } from '../../errors.js';
 
 class commentController {
-    static async create({ userId, postId, content, parentId }) {
+    static async create(req, res, next) {
+        const userId = req.currentUserId;
+        const { postId, content } = req.body;
+        const parentId = req.body.parentId ?? 0;
+
+        if (!userId) {
+            throw UnauthorizedError('NotAuthenticatedError', '로그인한 유저만 사용할 수 있는 서비스입니다.');
+        }
+
+        if (!postId || !content || !parentId) {
+            throw BadRequestError('BadRequestError', '요청값을 확인해주세요.');
+        }
+
         try {
-            const comment = await commentService.createComment({ userId, postId, content, parentId });
-            // 성공적인 응답 반환
-            return {
-                statusCode: 200,
-                response: comment,
-            };
+            const createComment = await commentService.createComment({ userId, postId, content, parentId });
+            return res.status(createComment.statusCode).send({ message: createComment.message });
         } catch (error) {
-            if (error.name === 'UserNotFoundId') {
-                throw errors.UserNotFoundId;
-            } else {
-                throw errors.CommentCreateFailedError;
-            }
+            next(error);
         }
     }
 
-    static async update({ userId, postId, commentId, content }) {
+    static async update(req, res, next) {
+        const userId = req.currentUserId;
+        const commentId = req.params.commentId;
+        const { postId, content } = req.body;
+
+        if (!userId) {
+            throw UnauthorizedError('NotAuthenticatedError', '로그인한 유저만 사용할 수 있는 서비스입니다.');
+        }
+
+        if (!commentId || !postId || !content) {
+            throw BadRequestError('BadRequestError', '요청값을 확인해주세요.');
+        }
+
         try {
-            const comment = await commentService.updateComment({ userId, postId, commentId, content });
-            // 성공적인 응답 반환
-            return {
-                statusCode: 200,
-                response: comment,
-            };
+            const updateComment = await commentService.updateComment({ userId, postId, commentId, content });
+            return res.status(updateComment.statusCode).send({ message: updateComment.message });
         } catch (error) {
-            if (error.name === 'UserNotFoundId') {
-                throw errors.UserNotFoundId;
-            } else if (error.name === 'CommentNotFoundId') {
-                throw errors.CommentNotFoundId;
-            } else {
-                throw errors.CommentUpdateFailedError;
-            }
+            next(error);
         }
     }
 
-    static async delete({ userId, commentId }) {
+    static async delete(req, res, next) {
+        const userId = req.currentUserId;
+        const commentId = req.params.commentId;
+
+        if (!userId) {
+            throw UnauthorizedError('NotAuthenticatedError', '로그인한 유저만 사용할 수 있는 서비스입니다.');
+        }
+
+        if (!commentId) {
+            throw BadRequestError('BadRequestError', '요청값을 확인해주세요.');
+        }
+
         try {
-            const comment = await commentService.deleteComment({ userId, commentId });
-            // 성공적인 응답 반환
-            return {
-                statusCode: 200,
-                response: comment,
-            };
+            const deleteComment = await commentService.deleteComment({ userId, commentId });
+            return res.status(deleteComment.statusCode).send({ message: deleteComment.message });
         } catch (error) {
-            if (error.name === 'UserNotFoundId') {
-                throw errors.UserNotFoundId;
-            } else if (error.name === 'CommentNotFoundId') {
-                throw errors.CommentNotFoundId;
-            } else {
-                throw errors.CommentDeleteFailedError;
-            }
+            next(error);
         }
     }
 
-    static async getComment({ userId, postId }) {
+    static async getComment(req, res, next) {
+        const userId = req.currentUserId;
+        const postId = req.params.postId;
+
+        if (!userId) {
+            throw UnauthorizedError('NotAuthenticatedError', '로그인한 유저만 사용할 수 있는 서비스입니다.');
+        }
+
+        if (!postId) {
+            throw BadRequestError('BadRequestError', '요청값을 확인해주세요.');
+        }
+
         try {
-            const comment = await commentService.getComment({ userId, postId });
-            // 성공적인 응답 반환
-            return {
-                statusCode: 200,
-                response: comment,
-            };
+            const getComment = await commentService.getComment({ userId, postId });
+            return res.status(getComment.statusCode).send({ message: getComment.message, CommentList: getComment.CommentList });
         } catch (error) {
-            if (error.name === 'UserNotFoundId') {
-                throw errors.UserNotFoundId;
-            } else if (error.name === 'PostNotFoundId') {
-                throw errors.PostNotFoundId;
-            } else {
-                throw errors.PostCommentsLoadFailedError;
-            }
+            next(error);
         }
     }
 }
