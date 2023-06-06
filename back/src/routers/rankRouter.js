@@ -3,15 +3,6 @@ import { rankController } from '../controllers/rankController.js';
 
 const rankRouter = Router();
 
-rankRouter.get('/list', async function (req, res, next) {
-    try {
-        const userId = req.currentUserId;
-        const user = await rankController.rankList({ userId });
-
-        res.status(user.statusCode).send(user.response);
-    } catch (error) {
-        next(error);
-    }
-});
+rankRouter.get('/list', rankController.rankList);
 
 export { rankRouter };

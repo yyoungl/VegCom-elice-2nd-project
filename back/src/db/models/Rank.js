@@ -11,7 +11,7 @@ class Rank {
                     FROM user \
                     JOIN point \
                     ON user.id = point.userId \
-                    WHERE user.deleteYN = "N" \
+                    WHERE user.deleteAt is null \
                     ORDER BY point.accuPoint desc';
         const [rows] = await mysqlDB.query(query);
 
