@@ -34,6 +34,7 @@ postRouter.post('/', async function (req, res, next) {
         const { userId, content, isPrivate, imageUrl } = req.body;
         // 사진을 어디서 받아와야 하나.. 일단 body에
         const post = await postController.createPost({ userId, content, isPrivate, imageUrl });
+
         res.status(post.statusCode).send(post.response);
     } catch (error) {
         next(error);
@@ -44,8 +45,9 @@ postRouter.post('/', async function (req, res, next) {
 postRouter.put('/:postId', async function (req, res, next) {
     try {
         const postId = req.params.postId;
-        const { content, isPrivate } = req.body;
-        const toUpdate = { content, isPrivate };
+        const { content, isPrivate, imageUrl } = req.body;
+        // 일단 사진 body로 받게 설정
+        const toUpdate = { content, isPrivate, imageUrl };
         const post = await postController.setPost({ postId, toUpdate });
 
         res.status(post.statusCode).send(post.response);

@@ -3,10 +3,8 @@ import { mysqlDB } from '../index.js';
 class Post {
     //1. 전체 피드 최신순
     static async getAllPosts() {
-        // post를 전체 조회
-        // const query = 'SELECT * FROM post ORDER BY createAt DESC'
         const query =
-            'SELECT *, post_image.imageUrl From post JOIN post_image On post.id = post_image.postId ORDER BY createAt DESC';
+            'SELECT post.*, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId ORDER BY createAt DESC';
         const [rows] = await mysqlDB.query(query);
 
         return rows;
@@ -20,17 +18,10 @@ class Post {
         const [rows] = await mysqlDB.query(query, [postId]);
 
         return rows;
-        //table postImage(postId) - imageURL
     }
 
     //3. 피드 작성하기
     static async create({ userId, content, isPrivate, imageUrl }) {
-        // // const query = 'INSERT INTO post (userId, content, isPrivate) VALUES (?, ?, ?)';
-        // const query = `INSERT INTO post (userId, content, isPrivate) VALUES (?, ?, ?);
-        //     INSERT INTO post_image (postId, imageUrl) VALUES (LAST_INSERT_ID(), ?);`;
-        // const [rows] = await mysqlDB.query(query, [userId, content, isPrivate, imageUrl]);
-
-        // return rows;
         const query1 = 'INSERT INTO post (userId, content, isPrivate) VALUES (?, ?, ?)';
         const query2 = 'INSERT INTO post_image (postId, imageUrl) VALUES (LAST_INSERT_ID(), ?)';
 
@@ -43,14 +34,15 @@ class Post {
         return row1;
     }
 
-    //4. 피드 수정하기
-    static async update({ postId, fieldToUpdate, newValue, imageUrl }) {
-        // const query = `UPDATE post SET ${fieldToUpdate} = ? WHERE id = ?`;
-        const query = `UPDATE post SET ${fieldToUpdate} = ? WHERE id = ?;
-                UPDATE post_image SET imageUrl = ? WHERE postId = ?;`;
-        const [rows] = await mysqlDB.query(query, [newValue, postId, imageUrl, postId]);
+    //4. 피드 수정하기(포스트와 이미지를 나눠서 작성)
+    static async update({ postId, fieldToUpdate, newValue }) {
+        const query = `UPDATE post SET ${fieldToUpdate} = ? WHERE id = ?`;
+        await mysqlDB.query(query, [newValue, postId]);
+    }
 
-        return rows;
+    static async updatePostImage({ postId, imageUrl }) {
+        const query = 'UPDATE post_image SET imageUrl = ? WHERE postId = ?';
+        await mysqlDB.query(query, [imageUrl, postId]);
     }
 
     //5. 피드 삭제하기

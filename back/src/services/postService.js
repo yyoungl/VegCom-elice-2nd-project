@@ -57,6 +57,11 @@ class postService {
             post = await Post.update({ postId, fieldToUpdate, newValue });
         }
 
+        if (toUpdate.imageUrl) {
+            const { imageUrl } = toUpdate;
+            post = await Post.updatePostImage({ postId, imageUrl });
+        }
+
         const updatedPost = await Post.getPost({ postId });
 
         return updatedPost;
