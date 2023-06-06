@@ -1,3 +1,5 @@
+import errors from '../../errors.js';
+
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
@@ -23,13 +25,11 @@ passport.use(
 function login_required(req, res, next) {
     passport.authenticate('jwt', { session: false }, (err, userId) => {
         if (err) {
-            res.status(500).send('서버 오류가 발생했습니다. 다시 시도해주세요.');
-            return;
+            throw errors.ServerError;
         }
 
         if (!userId) {
-            res.status(401).send('로그인한 유저만 사용할 수 있는 서비스입니다.');
-            return;
+            throw errors.NotAuthenticatedError;
         }
 
         req.currentUserId = userId;

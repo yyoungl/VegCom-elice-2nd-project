@@ -1,55 +1,104 @@
 import { Router } from 'express';
 import { login_required } from '../middlewares/login_required.js';
-import { userAuthService } from '../services/userService.js';
+import { userAuthController } from '../controllers/userController.js';
 
 const userAuthRouter = Router();
 
+// 회원가입
 userAuthRouter.post('/register', async function (req, res, next) {
     try {
         const { email, password, nickname } = req.body;
 
-        const isDuplicate = await userAuthService.checkDuplicate({ email });
+        const createUser = await userAuthController.register({ email, password, nickname });
 
-        if (isDuplicate) {
-            res.status(400).send({ message: '이미 존재하는 이메일 입니다.' });
-            throw new Error(user.errorMessage);
-        }
-
-        const user = await userAuthService.createUser({ email, password, nickname });
-        res.status(200).send(user);
+        res.status(createUser.statusCode).send(createUser.response);
     } catch (error) {
         next(error);
     }
 });
 
+// 로그인
 userAuthRouter.post('/login', async function (req, res, next) {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body;
 
-        const user = await userAuthService.getUser({ email, password });
+        const user = await userAuthController.login({ email, password });
 
-        if (user.errorMessage) {
-            res.status(400).send({ error: user.errorMessage });
-            throw new Error(user.errorMessage);
-        }
-
-        res.status(200).send(user);
+        res.status(user.statusCode).send(user.response);
     } catch (error) {
         next(error);
     }
 });
 
+// 로그인 검증
 userAuthRouter.get('/isLogin', login_required, async function (req, res, next) {
     try {
         const userId = req.currentUserId;
-        const currentUserInfo = await userAuthService.getUserInfo({ userId });
+        const currentUserInfo = await userAuthController.isLogin({ userId });
 
-        if (currentUserInfo.errorMessage) {
-            throw new Error(currentUserInfo.errorMessage);
-        }
+        res.status(currentUserInfo.statusCode).send(currentUserInfo.response);
+    } catch (error) {
+        next(error);
+    }
+});
 
-        res.status(200).send(currentUserInfo);
+// 유저 실적 보여주기
+userAuthRouter.get('/point', login_required, async function (req, res, next) {
+    try {
+        const userId = req.currentUserId;
+        const userPoint = await userAuthController.getPoint({ userId });
+
+        res.status(userPoint.statusCode).send(userPoint.response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+//전체 유저 수 불러오기
+userAuthRouter.get('/userCount', login_required, async function (req, res, next) {
+    try {
+        const userId = req.currentUserId;
+        const userCount = await userAuthController.getCount({ userId });
+
+        res.status(userCount.statusCode).send(userCount.response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 유저 정보 불러오기
+userAuthRouter.get('/:userId', login_required, async function (req, res, next) {
+    try {
+        const userId = req.params.userId;
+        const user = await userAuthController.getInfo({ userId });
+
+        res.status(user.statusCode).send(user.response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 유저 정보 수정하기(별명, 설명)
+userAuthRouter.put('/:userId', login_required, async function (req, res, next) {
+    try {
+        const userId = req.params.userId;
+        const { nickname, description } = req.body;
+        const toUpdate = { nickname, description };
+        const updatedUser = await userAuthController.setInfo({ userId, toUpdate });
+
+        res.status(updatedUser.statusCode).send(updatedUser.response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 유저 정보 삭제하기
+userAuthRouter.delete('/:userId', login_required, async function (req, res, next) {
+    try {
+        const userId = req.params.userId;
+        const deletedUser = await userAuthController.delInfo({ userId });
+
+        res.status(deletedUser.statusCode).send(deletedUser.response);
     } catch (error) {
         next(error);
     }

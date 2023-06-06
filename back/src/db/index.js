@@ -2,6 +2,7 @@ import 'dotenv/config';
 import mysql from 'mysql2/promise';
 
 import { User } from './models/User.js';
+import { Rank } from './models/Rank.js';
 
 const mysqlDBPromise = mysql.createPool({
     host: process.env.DB_IP,
@@ -24,4 +25,4 @@ mysqlDBPromise
         throw err;
     });
 
-export { mysqlDBPromise as mysqlDB, User };
+export { mysqlDBPromise as mysqlDB, User, Rank };

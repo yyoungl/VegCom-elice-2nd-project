@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UserStateContext } from '../../../App';
-import * as Api from '../../../api.jsx';
+import * as Api from '../../../api';
 
 function RegisterForm() {
     const navigate = useNavigate();
