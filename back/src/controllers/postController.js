@@ -61,7 +61,7 @@ async function delPost(req, res, next) {
         const postId = req.params.postId;
         const post = await postService.delPost({ postId });
 
-        res.status(200).send(post);
+        res.status(200).send({ message: '게시물 삭제가 완료되었습니다.' });
     } catch (error) {
         next(error);
     }

@@ -5,6 +5,10 @@ class postService {
     static async getAllPosts() {
         const posts = await Post.getAllPosts();
 
+        if (!posts || posts.length === 0) {
+            throw new Error('불러올 게시물이 없습니다.');
+        }
+
         return posts;
     }
 
