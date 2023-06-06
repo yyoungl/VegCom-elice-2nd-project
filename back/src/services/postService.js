@@ -13,7 +13,7 @@ class postService {
         const post = await Post.getPost({ postId });
 
         if (!post || post.length === 0) {
-            throw new Error('게시물 조회를 실패했습니다.');
+            throw new Error('게시물 조회에 실패했습니다.');
         }
 
         return post;
@@ -26,6 +26,10 @@ class postService {
             content,
             imageUrl,
         });
+
+        if (!post || post.length === 0) {
+            throw new Error('게시물 생성을 실패했습니다.');
+        }
 
         // mySQL은 조작을 하면? ResultSetHeader 형태로 받아와지기 때문에
         // insertId 값을 이용해서 새로 추가된 id값을 알아내고 그 값을

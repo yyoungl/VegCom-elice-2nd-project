@@ -3,6 +3,9 @@ import { mysqlDB } from '../index.js';
 class Post {
     //1. 전체 피드 최신순
     static async getAllPosts() {
+        // const query = 'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl
+        // FROM post JOIN post_image ON post.id = post_image.postId
+        // WHERE deleteAt IS NOT NULL ORDER BY createAt DESC';
         const query =
             'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId WHERE deleteYN = "N" ORDER BY createAt DESC';
         const [rows] = await mysqlDB.query(query);
@@ -12,7 +15,9 @@ class Post {
 
     //2. 피드 상세페이지
     static async getPost({ postId }) {
-        // const query = 'SELECT * FROM post WHERE id = ?';
+        // const query = 'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl
+        // FROM post JOIN post_image ON post.id = post_image.postId
+        // WHERE post.id = ? and deleteAt IS NOT NULL'
         const query =
             'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId WHERE post.id = ? and deleteYN = "N"';
         const [rows] = await mysqlDB.query(query, [postId]);
@@ -45,10 +50,10 @@ class Post {
 
     //5. 피드 삭제하기
     static async delete({ postId }) {
+        // const query = 'UPDATE post SET deleteAt = CURRENT_TIMESTAMP WHERE id = ?';
         const query = 'UPDATE post SET deleteYN = "Y", deleteAt = CURRENT_TIMESTAMP WHERE id = ?';
-        const [rows] = await mysqlDB.query(query, [postId]);
-
-        // deleteYN = "Y" 일 경우에만 파일을 보내주므로, 삭제에는 리턴 값이 없어도 될 듯
+        await mysqlDB.query(query, [postId]);
+        // deleteAt IS NULL 일 경우에만 파일을 보내주므로, 삭제에는 리턴 값이 없어도 될 듯
     }
 }
 
