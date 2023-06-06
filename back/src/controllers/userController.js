@@ -1,5 +1,5 @@
 import { userAuthService } from '../services/userService.js';
-import { BadRequestError } from '../../errors.js';
+import { BadRequestError, UnauthorizedError } from '../../errors.js';
 
 class userAuthController {
     static async register(req, res, next) {

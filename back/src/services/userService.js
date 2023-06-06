@@ -1,5 +1,5 @@
 import { User } from '../db/index.js';
-import { ConflictError, UnauthorizedError, BadRequestError, NotFoundError } from '../../errors.js';
+import { ConflictError, UnauthorizedError, BadRequestError, NotFoundError, InternalServerError } from '../../errors.js';
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
