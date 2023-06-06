@@ -21,6 +21,10 @@ class postService {
 
     //3. 피드 작성하기
     static async createPost({ userId, content, imageUrl }) {
+        if (!userId || !content || !imageUrl) {
+            throw new Error('필수 입력 값이 비어있습니다.');
+        }
+
         const post = await Post.create({
             userId,
             content,
