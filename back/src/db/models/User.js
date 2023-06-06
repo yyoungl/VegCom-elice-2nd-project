@@ -3,7 +3,7 @@ import { mysqlDB } from '../index.js';
 class User {
     // 이메일을 이용하여 유저 검색
     static async findByEmail({ email }) {
-        const query = 'SELECT id, password, nickname, description FROM user WHERE email = ?';
+        const query = 'SELECT id, password, nickname, description FROM user WHERE email = ? AND deleteYN = "N"';
         const [rows] = await mysqlDB.query(query, [email]);
 
         return rows[0];
@@ -11,7 +11,7 @@ class User {
 
     // 유저ID를 이용하여 유저 검색
     static async findById({ userId }) {
-        const query = 'SELECT id, email, password, userImage FROM user WHERE id = ?';
+        const query = 'SELECT id, email, password, userImage FROM user WHERE id = ? AND deleteYN = "N"';
         const [rows] = await mysqlDB.query(query, [userId]);
 
         return rows[0];
@@ -44,7 +44,13 @@ class User {
     // 유저의 포인트 내역 불러오기
     static async getPoint({ userId }) {
         const query =
-            'SELECT point.userId, point.currentPoint, point.accuPoint FROM user RIGHT JOIN point ON user.id = point.userId WHERE user.id = ?';
+            'SELECT point.userId, \
+                    point.currentPoint, \
+                    point.accuPoint \
+            FROM user \
+            RIGHT JOIN point \
+            ON user.id = point.userId \
+            WHERE user.id = ? AND user.deleteYN = "N"';
         const [rows] = await mysqlDB.query(query, [userId]);
 
         return rows[0];
@@ -52,7 +58,7 @@ class User {
 
     // 전체 유저 수 불러오기
     static async getCount() {
-        const query = 'SELECT COUNT(*) AS userCount FROM user';
+        const query = 'SELECT COUNT(*) AS userCount FROM user WHERE deleteYN = "N"';
         const [rows] = await mysqlDB.query(query);
 
         return rows[0];

@@ -16,7 +16,7 @@ class Search {
                         ON post.id = post_like.postId \
                         JOIN post_like_count \
                         ON post.id = post_like_count.postId \
-                        WHERE content LIKE CONCAT('%', ?, '%')`;
+                        WHERE content LIKE CONCAT('%', ?, '%') AND post.deleteYN = "N" `;
         const [rows] = await mysqlDB.query(query, [keyword]);
 
         return rows;
