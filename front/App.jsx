@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, createContext } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 import * as Api from './api';
 import { loginReducer } from './reducer';
@@ -10,13 +10,13 @@ import Header from './src/sections/header';
 import LoginForm from './src/pages/login/loginform.jsx';
 import RegisterForm from './src/pages/register/registerform';
 import MainPage from './src/pages/mainpage/mainpage.jsx';
-// import Rank from './src/pages/rank/rank';
+import Rank from './src/pages/rank/rank';
+import Story from './src/pages/story/story';
+
 // import PostDetail from './src/pages/postdetail/postdetail.jsx';
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
-
-// const isLogin = !!userState.user;
 
 function App() {
     // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
@@ -40,9 +40,9 @@ function App() {
                 payload: currentUser,
             });
 
-            console.log('%c sessionStorage에 토큰 있음.', 'color: #d93d1a;');
+            console.log('%c localStorage에 토큰 있음.', 'color: #d93d1a;');
         } catch (err) {
-            console.log('%c SessionStorage에 토큰 없음.', 'color: #d93d1a;');
+            console.log('%c localStorage에 토큰 없음.', 'color: #d93d1a;');
         }
         // fetchCurrentUser 과정이 끝났으므로, isFetchCompleted 상태를 true로 바꿔줌
         setIsFetchCompleted(true);
@@ -53,6 +53,11 @@ function App() {
         fetchCurrentUser();
     }, []);
 
+    // const location = useLocation();
+    // console.log('user location', location);
+    const isLogin = !!userState.user;
+    console.log('login status', isLogin);
+
     if (!isFetchCompleted) {
         return 'loading...';
     }
@@ -61,20 +66,19 @@ function App() {
         <DispatchContext.Provider value={dispatch}>
             <UserStateContext.Provider value={userState}>
                 <Router>
-                    {/* {isLogin && (
+                    {isLogin && (
                         <>
                             <Header />
                         </>
-                    )} */}
-                    <Header />
+                    )}
                     <Routes>
                         <Route path="/" exact element={<MainPage />} />
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
-                        {/* <Route path="/rank/list" element = {<Rank />} /> */}
-                        {/* <Route path="/story" element={<Story />} />
-                        <Route path="/story/:postId" element={<PostDetail />} />
-                        <Route path="*" element={<Rank />} /> */}
+                        <Route path="/rank/list" element={<Rank />} />
+                        <Route path="/story" element={<Story />} />
+                        {/* <Route path="/story/:postId" element={<PostDetail />} /> 
+                        <Routh path = "*" element = {<NotFound /> } */}
                     </Routes>
                     {/* <Footer /> */}
                 </Router>
