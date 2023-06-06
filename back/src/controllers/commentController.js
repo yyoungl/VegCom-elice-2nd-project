@@ -14,7 +14,7 @@ class commentController {
             if (error.name === 'UserNotFoundId') {
                 throw errors.UserNotFoundId;
             } else {
-                throw errors.test;
+                throw errors.CommentCreateFailedError;
             }
         }
     }
@@ -33,7 +33,7 @@ class commentController {
             } else if (error.name === 'CommentNotFoundId') {
                 throw errors.CommentNotFoundId;
             } else {
-                throw errors.test;
+                throw errors.CommentUpdateFailedError;
             }
         }
     }
@@ -52,7 +52,7 @@ class commentController {
             } else if (error.name === 'CommentNotFoundId') {
                 throw errors.CommentNotFoundId;
             } else {
-                throw errors.test;
+                throw errors.CommentDeleteFailedError;
             }
         }
     }
@@ -71,7 +71,7 @@ class commentController {
             } else if (error.name === 'PostNotFoundId') {
                 throw errors.PostNotFoundId;
             } else {
-                throw errors.test;
+                throw errors.PostCommentsLoadFailedError;
             }
         }
     }

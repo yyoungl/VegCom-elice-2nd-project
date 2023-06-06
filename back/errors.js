@@ -52,6 +52,8 @@ const errors = {
     CommentDeleteFailedError: createError('CommentDeleteFailedError', '댓글 삭제하기에 실패했습니다.', 500),
     // 게시물 전체 댓글 불러오기 실패
     PostCommentsLoadFailedError: createError('PostCommentsLoadFailedError', '게시글 총 댓글 불러오기에 실패했습니다.', 500),
+    // 검색하기 실패
+    SearchFailedError: createError('SearchFailedError', '검색에 실패했습니다.', 500),
 };
 
 export default errors;
