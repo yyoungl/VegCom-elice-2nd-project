@@ -9,6 +9,18 @@ function Story() {
     const navigate = useNavigate();
     const userState = useContext(UserStateContext);
 
+    useEffect(() => {
+        if (!userState.user) {
+            navigate('/');
+            alert('로그인한 유저만 사용할 수 있습니다.');
+        }
+    });
+
+    const [post, setPost] = useState();
+    Api.get('post/list').then(res => setPost(res.data));
+
+    console.log('post: ', post);
+
     const [posts, setPosts] = useState([
         {
             postId: 1,
@@ -17,6 +29,7 @@ function Story() {
             postImage: 'http://placekitten.com/200/201',
             content: '나는 감자다 푸하하하',
             like: true,
+            postLikeCount: 2394923,
         },
         {
             postId: 2,
@@ -25,6 +38,7 @@ function Story() {
             postImage: 'http://placekitten.com/200/203',
             content: '나는 채식 안 한다',
             like: true,
+            postLikeCount: 32,
         },
         {
             postId: 3,
@@ -33,6 +47,7 @@ function Story() {
             postImage: 'http://placekitten.com/200/202',
             content: '나는 채식 안 한다',
             like: false,
+            postLikeCount: 918,
         },
         {
             postId: 4,
@@ -41,6 +56,7 @@ function Story() {
             postImage: 'http://placekitten.com/200/202',
             content: '나는 채식 안 한다',
             like: false,
+            postLikeCount: 29981,
         },
         // Add more users as needed
     ]);
