@@ -1,4 +1,4 @@
-import { User, Like } from '../db/index.js';
+import { Like } from '../db/in';
 import errors from '../../errors.js'; //커스텀 에러 집어넣기
 
 //모델과 서비스를 어떻게 구성할까?
@@ -11,13 +11,17 @@ import errors from '../../errors.js'; //커스텀 에러 집어넣기
 //수정작성 중
 class likeService {
 
-    static async findLike({postId}) {
-       
-    
-        //에러처리 코드 넣기.
-        const like = await Like.getLike(postId);
-
-        return like;
+    static async togglePostLike({postId, userId}) {
+        try {
+            const isLiked = await Like.isLiked(postId, userId);
+            
+            return {
+                statusCode: 200,
+                message: '좋아요 여부 확인.'
+            };
+        } catch (error) {
+            throw new error ('좋아요 여부 확인에 실패하였습니다.')
+        }
     }
 
     static async countUp() {
@@ -41,3 +45,25 @@ export { likeService };
 
    
 
+// postService.js
+
+const PostLike = require('../models/postLike');
+
+// 현재 유저가 좋아요를 누른 상태인지 확인하고 처리
+async function togglePostLike(postId, userId) {
+  try {
+    const isLiked = await PostLike.isPostLiked(postId, userId);
+
+    if (isLiked) {
+      await PostLike.removePostLike(postId, userId);
+      await PostLike.decrementLikeCount(postId);
+    } else {
+      await PostLike.addPostLike(postId, userId);
+      await PostLike.incrementLikeCount(postId);
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = { togglePostLike };

@@ -1,5 +1,4 @@
 import { mysqlDB } from '../index.js';
-import {User} from '../models/User.js';
 
 //userid와 postid를 찾는 모델 작성하기
 //없다면 새롭게 생성하고 업데이트 해주는 모델 작성
