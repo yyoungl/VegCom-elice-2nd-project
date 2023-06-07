@@ -5,17 +5,15 @@ import Header from '../../sections/header';
 import RankCard from '../../components/rankcard/rankcard';
 import UserCard from '../../components/usercard/usercard';
 import { UserStateContext } from '../../../App';
-import { useNavigate, useParams } from "react-router-dom";
-
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Rank() {
-
     const navigate = useNavigate();
     const userState = useContext(UserStateContext);
     // const [users, setUsers] = useState([])
     const [rankList, setRankList] = useState([]);
     const userId = userState.id;
-    
+
     // const [users, setUsers] = useState([
     //     {
     //         id: 1,
@@ -40,9 +38,9 @@ function Rank() {
     //     }
     //     // Add more users as needed
     // ]);
-    const fetchRank = async ownerId => {
+    const fetchRank = async (ownerId) => {
         try {
-            const res = await Api.get("rank/list");
+            const res = await Api.get('rank/list');
             const ownerData = res.data;
             setRankList(ownerData);
         } catch (err) {
@@ -55,31 +53,26 @@ function Rank() {
 
     useEffect(() => {
         if (!userState.user) {
-            navigate("/login")
+            navigate('/login');
+            alert('로그인한 유저만 사용할 수 있습니다.');
             return;
         }
-        fetchRank({ userId })
-    }, [userState, navigate])
+        fetchRank({ userId });
+    }, [userState, navigate]);
 
-    
-    
-    
-
-    return(
+    return (
         <>
-            <Header />
             <div>
                 <UserCard user={userState.user} />
             </div>
-            <div className="w-full">
+            <div className='w-full'>
                 {rankList.map((user, index) => (
                     <div key={user.userId}>
-                        <RankCard user={user} index = {index + 1}/>
+                        <RankCard user={user} index={index + 1} />
                     </div>
                 ))}
             </div>
         </>
-
     );
 }
 

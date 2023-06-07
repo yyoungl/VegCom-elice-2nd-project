@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserStateContext, DispatchContext } from '../../App';
 
 import { Fragment } from 'react';
@@ -10,10 +10,19 @@ import { ChatBubbleLeftRightIcon, TrophyIcon, ArrowLeftOnRectangleIcon } from '@
 function Header() {
     const menus = [
         { name: '스토리', description: '스토리 페이지로 이동', href: '/story', icon: ChatBubbleLeftRightIcon },
-        { name: '랭킹', description: '랭킹 페이지로 이동', href: '*', icon: TrophyIcon },
+        { name: '랭킹', description: '랭킹 페이지로 이동', href: '/rank/list', icon: TrophyIcon },
         // {name: '쇼핑'},
     ];
     const menusBelow = [{ name: '로그아웃', href: '/', icon: ArrowLeftOnRectangleIcon }];
+
+    const dispatch = useContext(DispatchContext);
+    const navigate = useNavigate();
+
+    const logout = () => {
+        localStorage.removeItem('userToken');
+        dispatch({ type: 'LOGOUT' });
+        navigate('/');
+    };
 
     // const location = useLocation();
     // console.log('useLocation', location);
@@ -28,13 +37,15 @@ function Header() {
 
     // // 기본 페이지로 돌아가기
     // const logout = () => {
-    //     sessionStorage.removeItem('userToken');
+    //     localStorage.removeItem('userToken');
     //     dispatch({ type: 'LOGOUT' });
     //     navigate('/');
     // };
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between p-4" style={{ height: '150px' }}>
+        <header
+            className="fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between p-4"
+            style={{ height: '150px', backgroundColor: 'white' }}>
             <div className="logo">
                 <div className="logo-container flex justify-center items-center">
                     <img src="/logoshort.png" alt="오채완 로고" className="h-full logo"></img>
@@ -68,10 +79,11 @@ function Header() {
                                                 />
                                             </div>
                                             <div>
-                                                <a href={item.href} className="font-semibold text-gray-900">
+                                                <div
+                                                    className="font-semibold text-gray-900 text-left"
+                                                    onClick={() => navigate(item.href)}>
                                                     {item.name}
-                                                    <span className="absolute inset-0" />
-                                                </a>
+                                                </div>
                                                 <p className="mt-1 text-gray-600">{item.description}</p>
                                             </div>
                                         </div>
@@ -79,13 +91,14 @@ function Header() {
                                 </div>
                                 <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
                                     {menusBelow.map(item => (
-                                        <a
+                                        <div
                                             key={item.name}
+                                            onClick={item.name === '로그아웃' ? logout : null}
                                             href={item.href}
                                             className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100">
                                             <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                                             {item.name}
-                                        </a>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
