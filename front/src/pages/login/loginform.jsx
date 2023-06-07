@@ -35,7 +35,7 @@ function LoginForm() {
             });
             const user = res.data;
             const jwtToken = user.token;
-            sessionStorage.setItem('userToken', jwtToken);
+            localStorage.setItem('userToken', jwtToken);
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 payload: user,
@@ -52,11 +52,16 @@ function LoginForm() {
         //만약 로그인된 상태라면, 기본 페이지로 이동
     };
 
-    useEffect(() => {
-        if (userState.user) {
-            navigate('/rank/list');
-        }
-    });
+    useEffect(
+        () => {
+            if (userState.user) {
+                navigate('/rank');
+            }
+        },
+        [
+            /*여기에 들어있는 값이 변할 때만 발동*/
+        ],
+    );
 
     return (
         <div className="login-page">

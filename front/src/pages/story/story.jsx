@@ -70,6 +70,7 @@ function Story() {
                         함께 실천하는 사람들을 만나 보세요.
                     </h2>
                 </div>
+                <div onClick={() => navigate('/addpost')}>검색 버튼, 추가 버튼</div>
                 {posts.map(post => (
                     <div key={post.postId}>
                         <PostCard post={post} />

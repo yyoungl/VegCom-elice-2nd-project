@@ -12,6 +12,7 @@ import RegisterForm from './src/pages/register/registerform';
 import MainPage from './src/pages/mainpage/mainpage.jsx';
 import Rank from './src/pages/rank/rank';
 import Story from './src/pages/story/story';
+import AddPost from './src/components/post/addpost';
 
 // import PostDetail from './src/pages/postdetail/postdetail.jsx';
 
@@ -77,6 +78,7 @@ function App() {
                         <Route path="/register" element={<RegisterForm />} />
                         <Route path="/rank/list" element={<Rank />} />
                         <Route path="/story" element={<Story />} />
+                        <Route path="/addpost" element={<AddPost />} />
                         {/* <Route path="/story/:postId" element={<PostDetail />} /> 
                         <Routh path = "*" element = {<NotFound /> } */}
                     </Routes>
