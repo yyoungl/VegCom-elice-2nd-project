@@ -43,7 +43,9 @@ function Header() {
     // };
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between p-4" style={{ height: '150px' }}>
+        <header
+            className="fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between p-4"
+            style={{ height: '150px', backgroundColor: 'white' }}>
             <div className="logo">
                 <div className="logo-container flex justify-center items-center">
                     <img src="/logoshort.png" alt="오채완 로고" className="h-full logo"></img>
@@ -77,7 +79,9 @@ function Header() {
                                                 />
                                             </div>
                                             <div>
-                                                <div className="font-semibold text-gray-900" onClick={() => navigate(item.href)}>
+                                                <div
+                                                    className="font-semibold text-gray-900 text-left"
+                                                    onClick={() => navigate(item.href)}>
                                                     {item.name}
                                                 </div>
                                                 <p className="mt-1 text-gray-600">{item.description}</p>
