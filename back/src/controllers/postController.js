@@ -6,7 +6,7 @@ async function getAllposts(req, res, next) {
     try {
         const posts = await postService.getAllPosts();
 
-        res.status(200).send(posts);
+        res.status(posts.statusCode).send(posts);
     } catch (error) {
         next(error);
     }
@@ -18,7 +18,7 @@ async function getPost(req, res, next) {
         const postId = req.params.postId;
         const post = await postService.getPost({ postId });
 
-        res.status(200).send(post);
+        res.status(post.statusCode).send([post.post[0], { message: post.message }]);
     } catch (error) {
         next(error);
     }
@@ -33,7 +33,7 @@ async function createPost(req, res, next) {
 
         const post = await postService.createPost({ userId, content, imageUrl });
 
-        res.status(200).send(post);
+        res.status(post.statusCode).send([post.createdPost[0], { message: post.message }]);
     } catch (error) {
         next(error);
     }
@@ -49,7 +49,7 @@ async function setPost(req, res, next) {
         const toUpdate = { content, imageUrl };
         const post = await postService.setPost({ postId, toUpdate });
 
-        res.status(200).send(post);
+        res.status(post.statusCode).send([post.updatedPost[0], { message: post.message }]);
     } catch (error) {
         next(error);
     }
@@ -61,7 +61,7 @@ async function delPost(req, res, next) {
         const postId = req.params.postId;
         const post = await postService.delPost({ postId });
 
-        res.status(200).send({ message: '게시물 삭제가 완료되었습니다.' });
+        res.status(post.statusCode).send({ message: post.message });
     } catch (error) {
         next(error);
     }

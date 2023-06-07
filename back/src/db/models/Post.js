@@ -5,7 +5,7 @@ class Post {
     static async getAllPosts() {
         // const query = 'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl
         // FROM post JOIN post_image ON post.id = post_image.postId
-        // WHERE deleteAt IS NOT NULL ORDER BY createAt DESC';
+        // WHERE deleteAt IS NULL ORDER BY createAt DESC';
         const query =
             'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId WHERE deleteYN = "N" ORDER BY createAt DESC';
         const [rows] = await mysqlDB.query(query);
@@ -17,7 +17,7 @@ class Post {
     static async getPost({ postId }) {
         // const query = 'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl
         // FROM post JOIN post_image ON post.id = post_image.postId
-        // WHERE post.id = ? and deleteAt IS NOT NULL'
+        // WHERE post.id = ? AND deleteAt IS NULL'
         const query =
             'SELECT post.id as postId, post.userId, post.content, post_image.imageUrl FROM post JOIN post_image ON post.id = post_image.postId WHERE post.id = ? and deleteYN = "N"';
         const [rows] = await mysqlDB.query(query, [postId]);
@@ -53,7 +53,6 @@ class Post {
         // const query = 'UPDATE post SET deleteAt = CURRENT_TIMESTAMP WHERE id = ?';
         const query = 'UPDATE post SET deleteYN = "Y", deleteAt = CURRENT_TIMESTAMP WHERE id = ?';
         await mysqlDB.query(query, [postId]);
-        // deleteAt IS NULL 일 경우에만 파일을 보내주므로, 삭제에는 리턴 값이 없어도 될 듯
     }
 }
 
