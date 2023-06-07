@@ -6,6 +6,9 @@ import { login_required } from './middlewares/login_required.js';
 
 import { userAuthRouter } from './routers/userRouter.js';
 import { rankRouter } from './routers/rankRouter.js';
+import { commentRouter } from './routers/commentRouter.js';
+import { searchRouter } from './routers/searchRouter.js';
+import { postRouter } from './routers/postRouter.js';
 
 const app = express();
 
@@ -25,7 +28,10 @@ app.get('/', (req, res) => {
 
 // router, service 구현 (userAuthRouter는 맨 위에 있어야 함.)
 app.use('/user', userAuthRouter);
-app.use('/rank', rankRouter);
+app.use('/rank', login_required, rankRouter);
+app.use('/comment', login_required, commentRouter);
+app.use('/search', login_required, searchRouter);
+app.use('/post', login_required, postRouter); // 나중에 login_required 추가해야 함
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
