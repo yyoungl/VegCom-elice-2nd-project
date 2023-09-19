@@ -1,3 +1,10 @@
+Repository 분리했습니다!!
+
+[Client Repository](https://github.com/yyoungl/VegCom-elice-2nd-project-front)
+
+[Server Repository](https://github.com/yyoungl/Elice_2nd_Project-vegcom_back)
+
+
 오채완
 
 최종 서비스 명을 위 괄호 부분에 작성하세요.
